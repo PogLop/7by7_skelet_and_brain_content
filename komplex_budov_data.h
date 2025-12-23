@@ -19,7 +19,7 @@ typedef struct frame_buffer{
 }frame_buffer_t;
 
 typedef struct buffer_render_nokia{
-    int (*nokia_init)(frame_buffer_t* buffer);
+    int (*init)(frame_buffer_t* buffer);
     //int nokia_de_init(buffer_render_nokia_t* render_guy); //?
 
     void (*draw_rectal)(frame_buffer_t* buffer, goto_room_t xy, goto_room_t width_xy);
@@ -39,9 +39,9 @@ typedef struct pnuk_data{
 
 typedef struct room_ctx {
     buffer_render_nokia_t *nokia_render;
-    int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+    volatile int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
     miniosc *pane_osc;
-    pnuk_data_t pnuky[PNUKU_JE_TOLIK];
+    pnuk_data_t *pnuky;
 }room_ctx_t;
 
 

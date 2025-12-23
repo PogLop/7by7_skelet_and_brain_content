@@ -25,7 +25,7 @@ void pnuk_btn_callback_ABC(int value, int id)
     if(value) data->btn_stat = value;
 }
 
-void init(pnuk_config_t init_data[PNUKU_JE_TOLIK])
+void pnuk_init(pnuk_config_t init_data[PNUKU_JE_TOLIK])
 {
     for(int c = 0; c < PNUKU_JE_TOLIK; c++)
     {

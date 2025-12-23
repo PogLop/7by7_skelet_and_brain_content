@@ -8,7 +8,7 @@ typedef struct pnuk_config{
     int knoflPin;
 }pnuk_config_t;
 
-void init(pnuk_config_t init_data[PNUKU_JE_TOLIK]);
+void pnuk_init(pnuk_config_t init_data[PNUKU_JE_TOLIK]);
 
 pnuk_data_t* get_data(void);
 

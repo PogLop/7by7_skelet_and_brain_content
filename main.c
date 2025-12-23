@@ -3,10 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "halohalo_5100.h"
 #include "komplex_budov_data.h"
 #include "pnuk.h"
 #include "pnuk_driver.h"
 #include "room.h"
+#include "halohalo_buffer.h"
 
 
 #define MINIOSC_IMPLEMENTATION
@@ -91,8 +93,11 @@ int main(int argc, char **argv)
 
 	setup();
 
-	uint8_t matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+	//matrix
+	volatile int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+	//
 
+	//pnuky
 	pnuk_data_t *data_z_pnuku;
 
 	pnuk_config_t enkodery[PNUKU_JE_TOLIK] = {
@@ -101,10 +106,33 @@ int main(int argc, char **argv)
 		{.gpioA = 23, .gpioB = 24, .knoflPin = 25},
 	};
 
-	init(enkodery);
+	pnuk_init(enkodery);
+	//
 
+	//osc
 	miniosc *osc = minioscInit(7000, 7777, "127.0.0.1", 0);
-	
+	//
+
+	//nokia
+	static buffer_render_nokia_t nokia = {
+		.init = nokia_init,
+		.draw_rectal = nokia_draw_rectal,
+		.draw_line = nokia_draw_line,
+		.circle = nokia_circle,
+		.point = nokia_point,
+		.clear = nokia_clear,
+		.framebuffer_flush = nokia_framebuffer_flush
+	};
+	//
+
+	//ctx
+	room_ctx_t ctx = {
+		.nokia_render = &nokia,
+		.matrix_state = &matrix_state,
+		.pane_osc = osc,
+		.pnuky = data_z_pnuku
+	};
+	//
 
 	// matrix status read
 	while(1)
@@ -125,22 +153,6 @@ int main(int argc, char **argv)
 			}
 		}
 		
-
-		// matrix status DEBUG
-		/*
-		for(int a = 0; a < 7; a++)
-		{
-		
-			for(int b = 0; b < 7; b++)
-			{
-				(b == 6) ? printf("%d\n", matrix_state[a][b]) : printf("%d", matrix_state[a][b]);
-			}
-			
-			if(a == 6) printf("\e[1;1H\e[2J");
-		}
-		*/
-		//
-		//
 		data_z_pnuku = get_data();
 	}
 	
