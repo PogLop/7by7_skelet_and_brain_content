@@ -125,20 +125,12 @@ int main(int argc, char **argv)
 	};
 	//
 
-	//ctx
-	room_ctx_t ctx = {
-		.nokia_render = &nokia,
-		.matrix_state = &matrix_state,
-		.pane_osc = osc,
-		.pnuky = data_z_pnuku
-	};
-	//
-
 	// matrix status read
 	while(1)
 	{
 		for(int a = 0; a < 7; a++)
 		{
+			//read datat from like the matrix thinf
 			for(int b = 0; b < 7; b++)
 			{
 				gpioWrite(2, 1);
@@ -154,6 +146,17 @@ int main(int argc, char **argv)
 		}
 		
 		data_z_pnuku = get_data();
+
+		//bundle for room update!!! renovation!!
+		room_ctx_t ctx = {
+			.nokia_render = &nokia,
+			.matrix_state = &matrix_state,
+			.pane_osc = osc,
+			.pnuky = data_z_pnuku
+		};
+
+		//update room
+		//...
 	}
 	
 	pnuk_driver_de_init();

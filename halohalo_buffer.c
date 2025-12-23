@@ -1,6 +1,11 @@
+#include <stdint.h>
+#include <pigpio.h>
+#include <stdio.h>
+
+
 #include "halohalo_buffer.h"
 #include "komplex_budov_data.h"
-#include <stdint.h>
+
 
 int nokia_init(frame_buffer_t* buffer)
 {
