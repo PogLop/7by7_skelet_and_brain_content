@@ -14,6 +14,7 @@ int nokia_init(frame_buffer_t* buffer)
 
 void nokia_point(frame_buffer_t* frame_buffer, goto_room_t xy)
 {
+    printf("hi from nokia point green fn!%d\n\n", 888);
     return;
 }
 
