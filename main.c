@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "halohalo_5100.h"
+#include "halohalo_buffer.h"
 #include "komplex_budov_data.h"
 #include "pnuk.h"
 #include "pnuk_driver.h"
@@ -21,6 +21,9 @@
 #define PL_D PI_PUD_DOWN
 #define PL_U PI_PUD_UP
 #define PL_F PI_PUD_OFF
+
+#define KOMPLEX_SIZE_X 10 
+#define KOMPLEX_SIZE_Y 10
 
 
 uint8_t *itb(uint8_t k, int size)
@@ -97,6 +100,13 @@ int main(int argc, char **argv)
 	volatile int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
 	//
 
+	//místonoosti
+	int mi_x = 0;
+	int mi_y = 0;
+	static updte_slave_fn_make_him_better mistnosti[KOMPLEX_SIZE_X][KOMPLEX_SIZE_Y] = {NULL};
+	mistnosti[0][0] = &entrance_update;
+	//
+
 	//pnuky
 	pnuk_data_t *data_z_pnuku;
 
@@ -157,6 +167,14 @@ int main(int argc, char **argv)
 
 		//update room
 		//...
+		updte_slave_fn_make_him_better curr = mistnosti[mi_x][mi_y];
+
+		if(curr != NULL && mi_x < KOMPLEX_SIZE_X && mi_y < KOMPLEX_SIZE_Y)
+		{
+			goto_room_t dalsi = curr(&ctx);
+			mi_x = dalsi.x;
+			mi_y = dalsi.y;
+		}
 	}
 	
 	pnuk_driver_de_init();
