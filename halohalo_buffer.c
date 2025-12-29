@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <pigpio.h>
 #include <stdio.h>
+#include <string.h>
 
 
 #include "halohalo_buffer.h"
@@ -10,6 +11,9 @@
 #define RST_PIN 16
 #define DC_PIN 26
 #define CE_PIN 25
+
+#define NOKIA_BANKS_Y 5
+#define NOKIA_BANKS_X 83
 
 /* 
 	gpioSetMode(1, P_OUT); //data/command
@@ -91,6 +95,20 @@ void test_write()
     spiWrite(spi, (char*)&data, 1);
 
     gpioWrite(CE_PIN, 1);
+    
+    gpioDelay(2000);
+    
+    uint8_t test[84];
+    memset(test, 0xFF, sizeof(test));
+    
+    gpioWrite(CE_PIN, 0);
+    gpioWrite(DC_PIN, 1);
+
+    spiWrite(spi, (char*)&test, sizeof(test));
+
+    gpioWrite(CE_PIN, 1);
+
+    return;
 }
 
 void nokia_point(frame_buffer_t* frame_buffer, goto_room_t xy)
@@ -125,5 +143,12 @@ void nokia_clear(frame_buffer_t* frame_buffer)
 
 void nokia_framebuffer_flush(frame_buffer_t* frame_buffer)
 {
+    gpioWrite(CE_PIN, 0);
+    gpioWrite(DC_PIN, 1);    
+        
+    spiWrite(spi, (char*)&frame_buffer->buffer, NOKIA_WIDTH);
+    
+    gpioWrite(CE_PIN, 1);
+    
     return;
 }
