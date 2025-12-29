@@ -63,6 +63,12 @@ void setup()
 	gpioSetMode(0, P_OUT);
 	gpioSetMode(5, P_OUT);
 	gpioSetMode(6, P_OUT);
+
+	//nokia
+	gpioSetMode(26, P_OUT); //data/command
+	gpioSetMode(16, P_OUT); //rst
+	//gpioSetPullUpDown(16, PL_D);
+	gpioSetMode(25, P_OUT); //ce
 	//SETUP END :(
 
 	printf("77ready asi? :o)77\n");
@@ -103,8 +109,11 @@ int main(int argc, char **argv)
 	//místonoosti
 	int mi_x = 0;
 	int mi_y = 0;
+	
 	static updte_slave_fn_make_him_better mistnosti[KOMPLEX_SIZE_X][KOMPLEX_SIZE_Y] = {NULL};
-	mistnosti[0][0] = &entrance_update;
+	
+	mistnosti[0][0] = entrance_update;
+	mistnosti[1][0] = entrance_update;
 	//
 
 	//pnuky
@@ -133,6 +142,22 @@ int main(int argc, char **argv)
 		.clear = nokia_clear,
 		.framebuffer_flush = nokia_framebuffer_flush
 	};
+
+	if(nokia_init() < 0)
+	{
+		printf("spi failed :)");
+		return -1;
+	};
+
+	test_write();
+	test_write();
+	test_write();
+	test_write();
+	//
+
+	//framebuunkr oj7783
+	frame_buffer_t bff;
+	memset(&bff, 0, sizeof(bff));
 	//
 
 	// matrix status read
@@ -162,18 +187,26 @@ int main(int argc, char **argv)
 			.nokia_render = &nokia,
 			.matrix_state = &matrix_state,
 			.pane_osc = osc,
-			.pnuky = data_z_pnuku
+			.pnuky = data_z_pnuku,
+			.menu_x = mi_x,
+			.menu_y = mi_y,
+			.fb = &bff
 		};
 
 		//update room
 		//...
-		updte_slave_fn_make_him_better curr = mistnosti[mi_x][mi_y];
-
-		if(curr != NULL && mi_x < KOMPLEX_SIZE_X && mi_y < KOMPLEX_SIZE_Y)
+		if(mi_x < KOMPLEX_SIZE_X && mi_y < KOMPLEX_SIZE_Y)
 		{
-			goto_room_t dalsi = curr(&ctx);
-			mi_x = dalsi.x;
-			mi_y = dalsi.y;
+			updte_slave_fn_make_him_better curr = mistnosti[mi_x][mi_y];
+	
+			if(curr != NULL)
+			{
+				goto_room_t dalsi = curr(&ctx);
+				mi_x = dalsi.x;
+				mi_y = dalsi.y;
+				//printf("%d, %d\n", mi_x, mi_y);
+				//printf("NEXT:%d, %d\n", dalsi.x, dalsi.y);
+			}
 		}
 	}
 	
