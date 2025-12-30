@@ -1,4 +1,5 @@
 #include <pigpio.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -149,7 +150,10 @@ int main(int argc, char **argv)
 		return -1;
 	};
 
-	//test_write();
+	frame_buffer_t test_buffer;
+	memset(test_buffer.buffer, 0x0, sizeof(test_buffer));
+	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){70, 30}, 0);
+	nokia_framebuffer_flush(&test_buffer);
 	//
 
 	//framebuunkr oj7783

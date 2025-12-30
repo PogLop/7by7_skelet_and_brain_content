@@ -65,6 +65,7 @@ void set_display_y(uint8_t value)
     gpioWrite(CE_PIN, 1);
 }
 
+/*
 void test_write()
 {
     uint8_t data = 0xFF;
@@ -96,6 +97,8 @@ void test_write()
     
     return;
 }
+*/
+
 
 void mentalni_ocista()
 {
@@ -112,5 +115,25 @@ void mentalni_ocista()
         gpioWrite(CE_PIN, 1);
     }
 
+    return;
+}
+
+void deda_nokia_buffer_flush(frame_buffer_t *frame_buffer)
+{
+    for(uint8_t d = 0; d < NOKIA_BANKS_Y; d++)
+    {
+        for(int t = (d * NOKIA_BANKS_X); t < (d * NOKIA_BANKS_X + NOKIA_BANKS_X); t++)
+        {
+            set_display_y(d);
+
+            gpioWrite(CE_PIN, 0);
+            gpioWrite(DC_PIN, 1);
+
+            spiWrite(spi, (char*)&frame_buffer->buffer[t], 1);
+            
+            gpioWrite(CE_PIN, 1);
+        }
+    }
+    
     return;
 }
