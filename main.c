@@ -149,10 +149,7 @@ int main(int argc, char **argv)
 		return -1;
 	};
 
-	test_write();
-	test_write();
-	test_write();
-	test_write();
+	//test_write();
 	//
 
 	//framebuunkr oj7783

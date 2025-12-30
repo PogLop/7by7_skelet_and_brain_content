@@ -6,109 +6,23 @@
 
 #include "halohalo_buffer.h"
 #include "komplex_budov_data.h"
-
-
-#define RST_PIN 16
-#define DC_PIN 26
-#define CE_PIN 25
-
-#define NOKIA_BANKS_Y 5
-#define NOKIA_BANKS_X 83
+#include "deda.h"
 
 /* 
 	gpioSetMode(1, P_OUT); //data/command
 	gpioSetMode(16, P_OUT); //rst
 */
 
-static int spi;
-
 int nokia_init()
 {
-    spi = spiOpen(0, 96000, 0);
+    if(deda_nokia_init() < 0) { return -1; }
 
-    if(spi < 0)
-    {
-        return -1;
-    }
-
-
-    uint8_t commands[] = {
-        0x21, //h=1
-        0xC0, //voltage
-        0x07, //some temp
-        0x13, //bias system 1:48
-        0x20, //h=0
-        0x0C //normal 
-    };
-
-    gpioWrite(RST_PIN, 0);
-    gpioDelay(10);
-    gpioWrite(RST_PIN, 1);
-
-    for(int g = 0; g < sizeof(commands); g++)
-    {
-        gpioWrite(CE_PIN, 0);
-        gpioWrite(DC_PIN, 0);
-        spiWrite(spi, (char*)&commands[g], 1);
-        gpioWrite(CE_PIN, 1);
-    }
-
-    return 0;
-}
-
-void set_display_x(uint8_t value)
-{
-    if(value > 83){ return; }
-
-    uint8_t cmd = 0x80 | value;
-
-    gpioWrite(CE_PIN, 0);
-    gpioWrite(DC_PIN, 0);
-    spiWrite(spi, (char*)&cmd, 1);
-    gpioWrite(CE_PIN, 1);
-}
-
-void set_display_y(uint8_t value)
-{
-    if(value > 5){ return; }
-    
-    uint8_t cmd = 0x40 | value;
-    
-    gpioWrite(CE_PIN, 0);
-    gpioWrite(DC_PIN, 0);
-    spiWrite(spi, (char*)&cmd, 1);
-    gpioWrite(CE_PIN, 1);
-}
-
-/*
-*/
-void test_write()
-{
-    uint8_t data = 0xFF;
-
-    set_display_x(0);
     set_display_y(0);
+    set_display_x(0);
 
-    gpioWrite(CE_PIN, 0);
-    gpioWrite(DC_PIN, 1);
-
-    spiWrite(spi, (char*)&data, 1);
-
-    gpioWrite(CE_PIN, 1);
+    mentalni_ocista();
     
-    gpioDelay(2000);
-    
-    uint8_t test[84];
-    memset(test, 0xFF, sizeof(test));
-    
-    gpioWrite(CE_PIN, 0);
-    gpioWrite(DC_PIN, 1);
-
-    spiWrite(spi, (char*)&test, sizeof(test));
-
-    gpioWrite(CE_PIN, 1);
-
-    return;
+    return 0;
 }
 
 void nokia_point(frame_buffer_t* frame_buffer, goto_room_t xy)
@@ -143,12 +57,5 @@ void nokia_clear(frame_buffer_t* frame_buffer)
 
 void nokia_framebuffer_flush(frame_buffer_t* frame_buffer)
 {
-    gpioWrite(CE_PIN, 0);
-    gpioWrite(DC_PIN, 1);    
-        
-    spiWrite(spi, (char*)&frame_buffer->buffer, NOKIA_WIDTH);
-    
-    gpioWrite(CE_PIN, 1);
-    
-    return;
+    //call deda_flush some or 
 }
