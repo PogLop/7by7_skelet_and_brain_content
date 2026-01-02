@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <pigpio.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -28,7 +27,7 @@ int nokia_init()
 
 void nokia_point(frame_buffer_t* frame_buffer, goto_room_t xy)
 {
-    printf("hi from nokia point green fn!%d\n\n", 888);
+    //printf("hi from nokia point green fn!%d\n\n", 888); 
 
     if(xy.x < 0 || xy.x > NOKIA_WIDTH || xy.y < 0 || xy.y > NOKIA_HEIGHT) { return; }
 
@@ -118,7 +117,7 @@ void nokia_draw_line(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_ro
         {
             draw_line_high(frame_buffer, xy_end, xy_start);
         } else {
-            draw_line_high(frame_buffer, xy_start, xy_start);
+            draw_line_high(frame_buffer, xy_start, xy_end);
         }
     }
 
@@ -127,8 +126,12 @@ void nokia_draw_line(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_ro
 
 
 
-void nokia_draw_rectal(frame_buffer_t* frame_buffer, goto_room_t xy, goto_room_t width_xy) 
+void nokia_draw_rectal(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_room_t xy_end) 
 {
+    nokia_draw_line(frame_buffer, xy_start, (goto_room_t){xy_end.x, xy_start.y}, 0);
+    nokia_draw_line(frame_buffer, xy_start, (goto_room_t){xy_start.x, xy_end.y}, 0);
+    nokia_draw_line(frame_buffer, (goto_room_t){xy_start.x, xy_end.y}, xy_end, 0);
+    nokia_draw_line(frame_buffer, (goto_room_t){xy_end.x, xy_start.y}, xy_end, 0);
     return;
 }
 

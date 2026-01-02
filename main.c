@@ -8,8 +8,11 @@
 #include "komplex_budov_data.h"
 #include "pnuk.h"
 #include "pnuk_driver.h"
-#include "room.h"
 #include "halohalo_buffer.h"
+
+
+#include "room.h"
+#include "gridlock_room.h"
 
 
 #define MINIOSC_IMPLEMENTATION
@@ -111,19 +114,27 @@ int main(int argc, char **argv)
 	int mi_x = 0;
 	int mi_y = 0;
 	
-	static updte_slave_fn_make_him_better mistnosti[KOMPLEX_SIZE_X][KOMPLEX_SIZE_Y] = {NULL};
-	
-	mistnosti[0][0] = entrance_update;
-	mistnosti[1][0] = entrance_update;
+	static updte_slave_fn_make_him_better mistnosti[KOMPLEX_SIZE_X][KOMPLEX_SIZE_Y];
+
+	//memset nestacil :)
+	for(int a = 0; a < KOMPLEX_SIZE_X; a++)
+	{
+		for(int b = 0; b < KOMPLEX_SIZE_Y; b++)
+		{
+			mistnosti[a][b] = entrance_update;
+		}		
+	}
+
+	mistnosti[0][0] = gridlock_update;
 	//
 
 	//pnuky
 	pnuk_data_t *data_z_pnuku;
 
 	pnuk_config_t enkodery[PNUKU_JE_TOLIK] = {
-		{.gpioA = 20, .gpioB = 21, .knoflPin = 16},		
+		{.gpioA = 20, .gpioB = 21, .knoflPin = 1},		
 		{.gpioA = 15, .gpioB = 14, .knoflPin = 18},		
-		{.gpioA = 23, .gpioB = 24, .knoflPin = 25},
+		{.gpioA = 23, .gpioB = 24, .knoflPin = 19},
 	};
 
 	pnuk_init(enkodery);
@@ -150,15 +161,24 @@ int main(int argc, char **argv)
 		return -1;
 	};
 
+	/*
 	frame_buffer_t test_buffer;
 	memset(test_buffer.buffer, 0x0, sizeof(test_buffer));
+	
 	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){70, 30}, 0);
+	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){30, 0}, 0);
+	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){0, 30}, 0);
+
+	nokia_draw_rectal(&test_buffer, (goto_room_t){10, 12}, (goto_room_t){30, 20});
+	nokia_draw_rectal(&test_buffer, (goto_room_t){30, 30}, (goto_room_t){48, 47});
+	
 	nokia_framebuffer_flush(&test_buffer);
 	//
+	*/
 
 	//framebuunkr oj7783
 	frame_buffer_t bff;
-	memset(&bff, 0, sizeof(bff));
+	memset(&bff, 0x0, sizeof(bff));
 	//
 
 	// matrix status read

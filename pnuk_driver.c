@@ -23,6 +23,7 @@ void pnuk_btn_callback_ABC(int value, int id)
 {
     pnuk_data_t *data = &return_data[id];
     if(value) data->btn_stat = value;
+    printf("%d\n", value);
 }
 
 void pnuk_init(pnuk_config_t init_data[PNUKU_JE_TOLIK])

@@ -12,7 +12,7 @@ void draw_line_high(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_roo
 void draw_line_low(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_room_t xy_end);
 void nokia_draw_line(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_room_t xy_end, int width);
 
-void nokia_draw_rectal(frame_buffer_t* frame_buffer, goto_room_t xy, goto_room_t width_xy);
+void nokia_draw_rectal(frame_buffer_t* frame_buffer, goto_room_t xy_start, goto_room_t xy_end);
 
 void nokia_circle(frame_buffer_t* frame_buffer, goto_room_t xy, int d); //woaaah kolo
 

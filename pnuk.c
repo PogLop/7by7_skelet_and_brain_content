@@ -44,7 +44,7 @@ static void _knofl_callback(int gpio, int level, uint32_t tick, void *user)
 	printf("%d\n", pnuk -> knoflState);
 	*/
 
-	if(level) pnuk -> knoflCallback(1, pnuk -> id);
+	if(!level) { pnuk->knoflCallback(1, pnuk -> id); }
 }
 
 static void _callback(int gpio, int level, uint32_t tick, void *user)
@@ -99,6 +99,8 @@ pnukT * pnukPnuk(int id, int gpioA, int gpioB, int knoflPin, pnukCallMeBackT cal
 	gpioSetAlertFuncEx(gpioA, _callback, pnuk);
 	gpioSetAlertFuncEx(gpioB, _callback, pnuk);
 	gpioSetAlertFuncEx(knoflPin, _knofl_callback, pnuk);
+
+	gpioGlitchFilter(knoflPin, 150);
 	
 	return pnuk;
 }
@@ -109,6 +111,7 @@ void pnukOver(pnukT *pnuk)
 	{
 		gpioSetAlertFunc(pnuk->gpioA, 0);
 		gpioSetAlertFunc(pnuk->gpioB, 0);
+		gpioSetAlertFunc(pnuk->knoflPin, 0);
 		free(pnuk);
 	}
 }
