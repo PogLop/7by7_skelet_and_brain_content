@@ -22,7 +22,7 @@ typedef struct buffer_render_nokia{
     int (*init)();
     //int nokia_de_init(buffer_render_nokia_t* render_guy); //?
 
-    void (*draw_rectal)(frame_buffer_t* buffer, goto_room_t xy, goto_room_t width_xy);
+    void (*draw_rectal)(frame_buffer_t* buffer, goto_room_t xy, goto_room_t width_xy, uint8_t fill);
     void (*draw_line)(frame_buffer_t* buffer, goto_room_t xy_start, goto_room_t xy_end, int width);
     void (*circle)(frame_buffer_t* buffer, goto_room_t xy, int d); //woaaah kolo
     void (*point)(frame_buffer_t* buffer, goto_room_t xy);
@@ -39,12 +39,13 @@ typedef struct pnuk_data{
 
 typedef struct room_ctx {
     buffer_render_nokia_t *nokia_render;
-    volatile int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
+    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
     miniosc *pane_osc;
     pnuk_data_t *pnuky;
     int menu_x;
     int menu_y;
     frame_buffer_t *fb;
+    volatile int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
 }room_ctx_t;
 
 

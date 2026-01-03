@@ -18,8 +18,7 @@ goto_room_t entrance_update(room_ctx_t *ctx)
     }
     
     //!!
-    ctx->pnuky[1].pnuk_delta = 0; //!!
-    ctx->pnuky[2].pnuk_delta = 0; //!!
+    
     //!!
 
     //printf("x %d y %d\n", navigator_result.x, navigator_result.y);

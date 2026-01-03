@@ -8,11 +8,19 @@
 #include "komplex_budov_data.h"
 #include "pnuk.h"
 #include "pnuk_driver.h"
-#include "halohalo_buffer.h"
+#include "deda.h"
 
 
 #include "room.h"
 #include "gridlock_room.h"
+
+
+#include "halohalo_buffer.c"
+#include "pnuk.c"
+#include "pnuk_driver.c"
+#include "room.c"
+#include "gridlock_room.c"
+#include "deda.c"
 
 
 #define MINIOSC_IMPLEMENTATION
@@ -107,7 +115,13 @@ int main(int argc, char **argv)
 	setup();
 
 	//matrix
-	volatile int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+	int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+	memset(matrix_state, 0, sizeof(matrix_state));
+	//
+
+	//pnuktrix
+	int matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
+    memset(matrix_value_array, 0, sizeof(matrix_value_array));
 	//
 
 	//místonoosti
@@ -211,7 +225,8 @@ int main(int argc, char **argv)
 			.pnuky = data_z_pnuku,
 			.menu_x = mi_x,
 			.menu_y = mi_y,
-			.fb = &bff
+			.fb = &bff,
+			.matrix_pnuk_state = &matrix_value_array
 		};
 
 		//update room
