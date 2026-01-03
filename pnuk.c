@@ -100,7 +100,7 @@ pnukT * pnukPnuk(int id, int gpioA, int gpioB, int knoflPin, pnukCallMeBackT cal
 	gpioSetAlertFuncEx(gpioB, _callback, pnuk);
 	gpioSetAlertFuncEx(knoflPin, _knofl_callback, pnuk);
 
-	gpioGlitchFilter(knoflPin, 150);
+	gpioGlitchFilter(knoflPin, 300);
 	
 	return pnuk;
 }
