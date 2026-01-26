@@ -50,19 +50,24 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     {
         if(ctx->pnuky[0].pnuk_delta != 0)
         {
-            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] = ctx->pnuky[0].pnuk_val;
+            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] += ctx->pnuky[0].pnuk_delta;
         }
         
         if(ctx->pnuky[1].pnuk_delta != 0)
         {
-            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1] = ctx->pnuky[1].pnuk_val;
+            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1] += ctx->pnuky[1].pnuk_delta;
         }
         
         if(ctx->pnuky[2].pnuk_delta != 0)
         {
-            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2] = ctx->pnuky[2].pnuk_val;
+            ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2] += ctx->pnuky[2].pnuk_delta;
         }
 
+        
+        ctx->pnuky[0].pnuk_delta = 0;
+        ctx->pnuky[1].pnuk_delta = 0;
+        ctx->pnuky[2].pnuk_delta = 0;
+        
         //indicator, important, obey!!!
         nokia_draw_rectal(ctx->fb, (goto_room_t){grid_scale, grid_scale}, (goto_room_t){grid_scale + 5, grid_scale + 5}, 1);
     }
@@ -71,7 +76,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     if(ctx->pnuky[2].btn_stat == 1 && last_btn2_sate == 0)
     {
         value_mode = !value_mode;
-
+        
         ctx->pnuky[1].pnuk_val = cursor.x;
         ctx->pnuky[2].pnuk_val = cursor.y;
 
@@ -80,14 +85,24 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     last_btn2_sate = ctx->pnuky[2].btn_stat;
 
 
+    mobundle data_package = {0};
     for(int a = 0; a < MATRIX_SIZE; a++)
     {
         for(int b = 0; b < MATRIX_SIZE; b++)
         {
             char osc_addr[100];
+            char osc_addr_pnuky[100];
             snprintf(osc_addr, sizeof(osc_addr), "/matrix/r%d/c%d", a, b);
-
+            
             minioscSend(ctx->pane_osc, osc_addr, ",i", ctx->matrix_state[0][a][b]);
+            //minioscBundle(&data_package, osc_addr, ",i", ctx->matrix_state[0][a][b]);
+            
+            for(int c = 0; c < PNUKU_JE_TOLIK; c++)
+            {
+                snprintf(osc_addr_pnuky, sizeof(osc_addr_pnuky), "/pnuk/r%d/c%d/p%d", a, b, c);
+                //minioscBundle(&data_package, osc_addr_pnuky, ",i", ctx->matrix_pnuk_state[0][a][b][c]);
+                minioscSend(ctx->pane_osc, osc_addr_pnuky, ",i", ctx->matrix_pnuk_state[0][a][b][c]);
+            }
 
             if(ctx->matrix_state[0][b][a])
             {
@@ -95,7 +110,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
             }
         }
     }
-
+    //minioscSendBundle(ctx->pane_osc, &data_package);
 
     for(int g = 0; g <= MATRIX_SIZE; g++)
     {
