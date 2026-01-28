@@ -49,10 +49,10 @@ uint8_t *itb(uint8_t k, int size)
 	if(k == 0) return output;
 	if(k == 1) { output[0] = 1; return output; }
 
-  for(int p = 0; p < size; p++)
-  {
+  	for(int p = 0; p < size; p++)
+  	{
 		output[p] = (k >> p) & 1;
-  }
+  	}
 
 	return output;
 }
