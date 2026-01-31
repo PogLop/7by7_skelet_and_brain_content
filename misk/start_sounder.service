@@ -1,0 +1,10 @@
+[Unit]
+Description=starts
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/poklop/77/telefonni_centrala_na_rohu_77/start_every.sh
+
+[Install]
+WantedBy=multi-user.target
