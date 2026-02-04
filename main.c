@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #include "halohalo_buffer.h"
 #include "komplex_budov_data.h"
 #include "pnuk.h"
@@ -23,6 +24,7 @@
 #include "deda.c"
 
 
+//klasicka single-header knihovna
 #define MINIOSC_IMPLEMENTATION
 #include "miniosc/miniosc.h"
 
@@ -38,6 +40,9 @@
 #define KOMPLEX_SIZE_Y 10
 
 
+
+
+//integer to array of 0 and 1
 uint8_t *itb(uint8_t k, int size)
 {
 	uint8_t *output = malloc(size);
@@ -58,6 +63,7 @@ uint8_t *itb(uint8_t k, int size)
 }
 
 
+//setup general purpose input/output pins for device operation
 void setup()
 {
 	//SETUP
@@ -89,7 +95,8 @@ void setup()
 }
 
 
-void setMuxAddr(uint8_t st_mux, uint8_t nd_mux) //sets channel address on both MUXes
+//sets channel address on both MUXes
+void setMuxAddr(uint8_t st_mux, uint8_t nd_mux)
 {
 	uint8_t *mx_one = itb(st_mux, 3);
 	uint8_t *mx_two = itb(nd_mux, 3);
@@ -112,17 +119,19 @@ int main(int argc, char **argv)
 {
 	if(gpioInitialise() < 0) return 1;
 
+	
 	setup();
 
+	
 	//matrix
 	int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
 	memset(matrix_state, 0, sizeof(matrix_state));
-	//
+
 
 	//pnuktrix
 	int matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
     memset(matrix_value_array, 0, sizeof(matrix_value_array));
-	//
+
 
 	//místonoosti
 	int mi_x = 0;
@@ -140,7 +149,7 @@ int main(int argc, char **argv)
 	}
 
 	mistnosti[0][0] = gridlock_update;
-	//
+
 
 	//pnuky
 	pnuk_data_t *data_z_pnuku;
@@ -150,13 +159,12 @@ int main(int argc, char **argv)
 		{.gpioA = 15, .gpioB = 14, .knoflPin = 18},		
 		{.gpioA = 23, .gpioB = 24, .knoflPin = 19},
 	};
-
 	pnuk_init(enkodery);
-	//
+
 
 	//osc
 	miniosc *osc = minioscInit(7000, 7777, "127.0.0.1", 0);
-	//
+
 
 	//nokia
 	static buffer_render_nokia_t nokia = {
@@ -166,8 +174,10 @@ int main(int argc, char **argv)
 		.circle = nokia_circle,
 		.point = nokia_point,
 		.clear = nokia_clear,
-		.framebuffer_flush = nokia_framebuffer_flush
+		.framebuffer_flush = nokia_framebuffer_flush,
+		.draw_misc_buffer = nokia_draw_misc_buffer
 	};
+
 
 	if(nokia_init() < 0)
 	{
@@ -175,27 +185,13 @@ int main(int argc, char **argv)
 		return -1;
 	};
 
-	/*
-	frame_buffer_t test_buffer;
-	memset(test_buffer.buffer, 0x0, sizeof(test_buffer));
-	
-	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){70, 30}, 0);
-	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){30, 0}, 0);
-	nokia_draw_line(&test_buffer, (goto_room_t){0, 0}, (goto_room_t){0, 30}, 0);
-
-	nokia_draw_rectal(&test_buffer, (goto_room_t){10, 12}, (goto_room_t){30, 20});
-	nokia_draw_rectal(&test_buffer, (goto_room_t){30, 30}, (goto_room_t){48, 47});
-	
-	nokia_framebuffer_flush(&test_buffer);
-	//
-	*/
 
 	//framebuunkr oj7783
 	frame_buffer_t bff;
 	memset(&bff, 0x0, sizeof(bff));
-	//
 
-	// matrix status read
+
+	//main event going round n round
 	while(1)
 	{
 		for(int a = 0; a < 7; a++)
@@ -215,7 +211,9 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		data_z_pnuku = get_data();
+
+		data_z_pnuku = pnuk_get_data();
+
 
 		//bundle for room update!!! renovation!!
 		room_ctx_t ctx = {
@@ -229,6 +227,7 @@ int main(int argc, char **argv)
 			.matrix_pnuk_state = &matrix_value_array
 		};
 
+
 		//update room
 		//...
 		if(mi_x < KOMPLEX_SIZE_X && mi_y < KOMPLEX_SIZE_Y)
@@ -240,8 +239,6 @@ int main(int argc, char **argv)
 				goto_room_t dalsi = curr(&ctx);
 				mi_x = dalsi.x;
 				mi_y = dalsi.y;
-				//printf("%d, %d\n", mi_x, mi_y);
-				//printf("NEXT:%d, %d\n", dalsi.x, dalsi.y);
 			}
 		}
 	}

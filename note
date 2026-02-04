@@ -1,3 +1,0 @@
-sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/osc_test.pd
-printf format specifiers
-sudo screen -S stuff -md bash -c "./main"

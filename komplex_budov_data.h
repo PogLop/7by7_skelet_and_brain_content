@@ -24,8 +24,11 @@ typedef struct buffer_render_nokia{
 
     void (*draw_rectal)(frame_buffer_t* buffer, goto_room_t xy, goto_room_t width_xy, uint8_t fill);
     void (*draw_line)(frame_buffer_t* buffer, goto_room_t xy_start, goto_room_t xy_end, int width);
-    void (*circle)(frame_buffer_t* buffer, goto_room_t xy, int d); //woaaah kolo
+    void (*circle)(frame_buffer_t* buffer, goto_room_t xy, int d); //woaaah kolo (nefunguje, spíš není implementováno)
     void (*point)(frame_buffer_t* buffer, goto_room_t xy);
+    
+    //data_buffer pointer na array (buffer)
+    void (*draw_misc_buffer)(frame_buffer_t* buffer, int *data_buffer, int datat_buffer_w, int datat_buffer_h, goto_room_t origin);
 
     void (*clear)(frame_buffer_t* buffer);
     void (*framebuffer_flush)(frame_buffer_t* buffer);

@@ -102,6 +102,25 @@ void nokia_circle(frame_buffer_t* frame_buffer, goto_room_t xy, int d)
     return;
 }
 
+void nokia_draw_misc_buffer(frame_buffer_t* frame_buffer, int *data_buffer, int datat_buffer_w, int datat_buffer_h, goto_room_t origin)
+{
+    int buff_size = datat_buffer_h * datat_buffer_w;
+
+    for(int n = 0; n < datat_buffer_h; n++)
+    {
+        for(int m = 0; m < datat_buffer_w; m++)
+        {
+            int num = *(data_buffer + n * m + m); //pointer math!
+            if(num == 1)
+            {
+                nokia_point(frame_buffer, (goto_room_t){origin.x + n, origin.y + m});
+            }
+        }
+    }
+
+    return;
+}
+
 void nokia_clear(frame_buffer_t* frame_buffer)
 {
     mentalni_ocista();

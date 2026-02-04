@@ -45,7 +45,7 @@ void pnuk_init(pnuk_config_t init_data[PNUKU_JE_TOLIK])
     }
 }
 
-pnuk_data_t* get_data(void)
+pnuk_data_t* pnuk_get_data(void)
 {
     return return_data;
 }

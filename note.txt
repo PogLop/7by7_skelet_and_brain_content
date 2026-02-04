@@ -1,0 +1,11 @@
+sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/osc_test.pd
+sudo screen -S stuff -md bash -c "./main"
+
+
+Pd externals locations on various operating systems relevant to scope of this development environment
+--
+/Users/ass149/Library/Pd (milan (macos))
+~/.local/lib/pd/extra/ (linux)
+
+
+printf format specifiers
