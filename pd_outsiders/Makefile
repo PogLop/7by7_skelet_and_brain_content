@@ -8,6 +8,7 @@ lib.name = gridlocke
 
 simple_matrix.class.sources = simple_matrix~.c
 changes.class.sources = changes.c
+#xfade.class.sources = xfade~.c
 
 # datafiles = myclass1-help.pd myclass2-help.pd README.txt LICENSE.txt
 

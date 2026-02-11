@@ -3,12 +3,17 @@
 
 #include <m_pd.h>
 #include <string.h>
-#include <pthread.h>
 #include <stdarg.h>
+#include <math.h>
+#include <stdio.h>
 
 
 #define MATRIX_SIZE 7
 #define TRANSM_SIZE (MATRIX_SIZE * MATRIX_SIZE * 3)
+#define ZVUKAR 0.707106781187 //use if you dont want to sqrt number 2 or divide by 2, works better maybe
+
+#define INS_OFF 2
+#define OUTS_OFF (INS_OFF + MATRIX_SIZE)
 
 
 static t_class *simple_matrix_tilde_class;
@@ -17,34 +22,25 @@ typedef struct _simple_matrix_tilde
 {
   t_object x_obj;
 
-  t_float some;
-
-  int frame;
-
-  int val;
-  int posx;
-  int posy;
-
-  char recv[TRANSM_SIZE];
+  int val, posx, posy;
 
   volatile unsigned int m_state[MATRIX_SIZE][MATRIX_SIZE];
-  //t_float stat;
 
   t_inlet *sym_in_on;
   t_symbol *sgo;
 
-  pthread_mutex_t mutex;
+  t_inlet *ins[MATRIX_SIZE];
+  t_outlet *outs[MATRIX_SIZE];
 
-  t_inlet *sig_one_in, *sig_two_in, *sig_tri_in, *sig_qud_in, *sig_fiv_in, *sig_six_in, *sig_sev_in; 
-  t_outlet *sig_one_out, *sig_two_out, *sig_tri_out, *sig_qud_out, *sig_fiv_out, *sig_six_out, *sig_sev_out;
+  t_float some;
 
 } t_simple_matrix_tilde;
 
 
 void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
 {
-  int k;
-  int l;
+  //int k;
+  //int l;
   
   
   //memcpy(x->recv, s->s_name, TRANSM_SIZE); //null terminated, takze 3
@@ -63,65 +59,111 @@ void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
     }
   } 
   */
+
+  //if(s->s_name[0] == 'c') memset((void *)x->m_state, 0, sizeof(x->m_state)); return; //:)
   
   x->val = s->s_name[0] - '0';
   x->posx = s->s_name[1] - '0';
   x->posy = s->s_name[2] - '0';
   
-  x->m_state[x->posx][x->posy] = x->val;
-  
+  x->m_state[x->posy][x->posx] = x->val;
+
+  for(int g = 0; g < MATRIX_SIZE; g++)
+  {
+    for(int h = 0; h < MATRIX_SIZE; h++)
+    {
+      if(h == 6) printf("%d\n", x->m_state[g][h]); else printf("%d", x->m_state[g][h]);
+    }
+  }
+  printf("\n\n");
 }
 
 t_int *simple_matrix_tilde_perform(t_int *w)
 {
-  t_simple_matrix_tilde *x =  (t_simple_matrix_tilde *)(w[1]);
-  t_sample *sig_in =          (t_sample *)(w[2]);
-  t_sample *sig_out =         (t_sample *)(w[3]);
-  int len =                   (int)(w[4]); //lenght of sample
+  int xx,yy,o,k;
+  t_float mohutnost;
 
-  for(int u = 0; u < len; u++)
+
+  t_simple_matrix_tilde *x = (t_simple_matrix_tilde *)(w[1]); //sorry for variable namingq
+  t_sample *out;
+  t_sample *inu;
+  
+  int len = (int)(w[16]);
+  //2-8 9-15
+  
+  for(k = 0; k < MATRIX_SIZE; k++) out = (t_sample *)(w[OUTS_OFF + k]); for(o = 0; o < len; o++) out[o] = 0.0;
+  
+  for(xx = 0; xx < MATRIX_SIZE; xx++)
   {
-    *sig_out++ = (*sig_in++) * (t_sample)x->m_state[0][0];
+    //int act = 0;
+
+    //for(yy = 0; yy < MATRIX_SIZE; yy++) if(x->m_state[yy][xx]) act++;
+    //if(!act) continue;
+    
+    //float gin = 1.0f / sqrtf((float)act);
+    out = (t_sample *)(w[OUTS_OFF + xx]);
+    
+    for(yy = 0; yy < MATRIX_SIZE; yy++)
+    {
+      //soucet ins yy do out xx
+      mohutnost = (t_float)x->m_state[yy][xx];
+      inu = (t_sample *)(w[INS_OFF + yy]);
+      for(o = 0; o < len; o++) out[o] += inu[o] * ZVUKAR * mohutnost;
+    }
   }
 
-  return (w+5);
+  return (w+17);
 }
+
 
 void simple_matrix_tilde_dsp(t_simple_matrix_tilde *x, t_signal **sp)
 {
-  dsp_add(simple_matrix_tilde_perform, 4, x, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
+
+  dsp_add(simple_matrix_tilde_perform, 16, 
+    x, 
+    sp[0]->s_vec, //in 
+    sp[1]->s_vec, 
+    sp[2]->s_vec, 
+    sp[3]->s_vec, 
+    sp[4]->s_vec, 
+    sp[5]->s_vec,  
+    sp[6]->s_vec, 
+    sp[7]->s_vec, //out
+    sp[8]->s_vec, 
+    sp[9]->s_vec, 
+    sp[10]->s_vec, 
+    sp[11]->s_vec, 
+    sp[12]->s_vec, 
+    sp[13]->s_vec, 
+    sp[0]->s_n); 
+    //ummm
+    //
 }
 
-void *simple_matrix_tilde_new(t_symbol *s, int argc, t_atom *argv, t_floatarg some)
+
+void *simple_matrix_tilde_new(/*t_symbol *s, int argc, t_atom *argv*/)
 {
+  int j;
+
   t_simple_matrix_tilde *x = (t_simple_matrix_tilde *)pd_new(simple_matrix_tilde_class);
 
-  //pthread_mutex_init(&x->mutex, NULL); no more mutex
+  //wall,
+  //wall,
+  for(j = 0; j < (MATRIX_SIZE - 1); j++) //i think the -1 is caused by MAINSIGNALIN
+  {
+    x->ins[j] = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+  }
+
+  for(j = 0; j < MATRIX_SIZE; j++)
+  {
+    x->outs[j] = outlet_new(&x->x_obj, &s_signal);
+  }
   
   x->sym_in_on = inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("symbol"), gensym("oscin"));
-  //x->sym_in_on = symbolinlet_new(&x->x_obj, &x->sgo);
   
-  //wall,
-  //wall,
-  //x->sig_one_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_two_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_tri_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_qud_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_fiv_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_six_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-  //x->sig_sev_in = inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+  memset((void *)x->m_state, 0, sizeof(x->m_state));
   
-  x->sig_one_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_two_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_tri_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_qud_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_fiv_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_six_out = outlet_new(&x->x_obj, &s_signal);
-  //x->sig_sev_out = outlet_new(&x->x_obj, &s_signal);
-  
-  //memset(x->m_state, 0, sizeof(x->m_state) * MATRIX_SIZE * MATRIX_SIZE);
-  memset(x->m_state, 0, sizeof(x->m_state));
-  
+/*  
   for(int a = 0; a < 7; a++)
   {
     for(int b = 0; b < 7; b++)
@@ -129,6 +171,7 @@ void *simple_matrix_tilde_new(t_symbol *s, int argc, t_atom *argv, t_floatarg so
       post("%d", x->m_state[a][b]);
     }
   }
+*/
 
   //post("size %d", sizeof(*x));
 
@@ -139,21 +182,11 @@ void simple_matrix_tilde_freedom(t_simple_matrix_tilde *x)
 {
   inlet_free(x->sym_in_on);
 
-  //inlet_free(x->sig_one_in);
-  //inlet_free(x->sig_two_in);
-  //inlet_free(x->sig_tri_in);
-  //inlet_free(x->sig_qud_in);
-  //inlet_free(x->sig_fiv_in);
-  //inlet_free(x->sig_six_in);
-  //inlet_free(x->sig_sev_in);
-
-  outlet_free(x->sig_one_out);
-  //outlet_free(x->sig_two_out);
-  //outlet_free(x->sig_tri_out);
-  //outlet_free(x->sig_qud_out);
-  //outlet_free(x->sig_fiv_out);
-  //outlet_free(x->sig_six_out);
-  //outlet_free(x->sig_sev_out);
+  for(int j = 0; j < MATRIX_SIZE; j++)
+  {
+    inlet_free(x->ins[j]);
+    outlet_free(x->outs[j]);
+  }
 }
 
 void simple_matrix_tilde_setup(void)
@@ -171,5 +204,4 @@ void simple_matrix_tilde_setup(void)
   
   class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_dsp, gensym("dsp"), A_CANT, 0);
   CLASS_MAINSIGNALIN(simple_matrix_tilde_class, t_simple_matrix_tilde, some);
-  
 }
