@@ -94,14 +94,14 @@ t_int *simple_matrix_tilde_perform(t_int *w)
   {
     out = (t_float *)(w[OUTS_OFF + xx]);
     memset(out, 0, sizeof(t_float) * len);
-    
+
     out = (t_float *)(w[OUTS_OFF + xx]);
     for(yy = 0; yy < MATRIX_SIZE; yy++)
     {
       inu = (t_float *)(w[INS_OFF + yy]);
       for(o = 0; o < len; o++)
       {
-        out[o] += (inu[o] * (1/sqrtf(2.0))) * (t_float)x->m_state[yy][xx];
+        out[o] += (inu[o] * (1/sqrtf(2.0))) * (t_float)x->m_state[yy][xx]; //sqrtf can be replaced by ZVUKAR
       }
     }
   }

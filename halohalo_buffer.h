@@ -1,7 +1,6 @@
 #pragma once
 
 #include "komplex_budov_data.h"
-#include <stdint.h>
 
 int nokia_init(); //do not use in rooms
 //int nokia_de_init(frame_buffer_t* frame_buffer); //?
