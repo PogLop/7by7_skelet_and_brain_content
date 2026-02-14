@@ -72,8 +72,9 @@ void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
   {
     for(int h = 0; h < MATRIX_SIZE; h++)
     {
-      if(h == 6) printf("%d\n", x->m_state[g][h]); else printf("%d", x->m_state[g][h]);
+      printf("%d", x->m_state[g][h]);
     }
+    printf("\n");
   }
   printf("\n\n");
 }

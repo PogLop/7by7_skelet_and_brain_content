@@ -5,6 +5,7 @@
 #include <string.h>
 
 
+//hlavy
 #include "halohalo_buffer.h"
 #include "komplex_budov_data.h"
 #include "pnuk.h"
@@ -12,10 +13,12 @@
 #include "deda.h"
 
 
+//menu includerationoles
 #include "room.h"
 #include "gridlock_room.h"
 
 
+//implementationoies
 #include "halohalo_buffer.c"
 #include "pnuk.c"
 #include "pnuk_driver.c"
@@ -24,7 +27,7 @@
 #include "deda.c"
 
 
-//klasicka single-header knihovna
+//klasicka single-header knihovna [coo? :O]
 #define MINIOSC_IMPLEMENTATION
 #include "miniosc/miniosc.h"
 
@@ -36,10 +39,15 @@
 #define PL_U PI_PUD_UP
 #define PL_F PI_PUD_OFF
 
+
+/*
+
+stack based menu system anti-thesis
+
+
+*/
 #define KOMPLEX_SIZE_X 10 
 #define KOMPLEX_SIZE_Y 10
-
-
 
 
 //integer to array of 0 and 1
@@ -127,6 +135,10 @@ int main(int argc, char **argv)
 	int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
 	memset(matrix_state, 0, sizeof(matrix_state));
 
+	//matrix2
+	int matrix[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK + 1]; //3pnuky+hodnotabodu
+	memset(matrix, 0, sizeof(matrix));
+
 
 	//pnuktrix
 	int matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
@@ -148,6 +160,7 @@ int main(int argc, char **argv)
 		}		
 	}
 
+	//set room map
 	mistnosti[0][0] = gridlock_update;
 
 
@@ -181,7 +194,7 @@ int main(int argc, char **argv)
 
 	if(nokia_init() < 0)
 	{
-		printf("spi failed :)");
+		printf("spi failed :) [nokia deda]");
 		return -1;
 	};
 
@@ -200,13 +213,9 @@ int main(int argc, char **argv)
 			for(int b = 0; b < 7; b++)
 			{
 				gpioWrite(2, 1);
-				
 				setMuxAddr(b, a);
-
 				gpioDelay(5);
-				
-				matrix_state[a][b] = gpioRead(4);
-
+				matrix_state[a][b] = gpioRead(4); //write to matrix
 				gpioWrite(2, 0);
 			}
 		}
@@ -219,6 +228,7 @@ int main(int argc, char **argv)
 		room_ctx_t ctx = {
 			.nokia_render = &nokia,
 			.matrix_state = &matrix_state,
+			.matrix = &matrix,
 			.pane_osc = osc,
 			.pnuky = data_z_pnuku,
 			.menu_x = mi_x,
@@ -245,5 +255,6 @@ int main(int argc, char **argv)
 	
 	pnuk_driver_de_init();
 	gpioTerminate();
-	return 0;
+
+	return 0; //mirumilovny konec, ktereho nebude nikdá dosazeno.
 }

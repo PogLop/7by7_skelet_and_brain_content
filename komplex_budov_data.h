@@ -9,14 +9,17 @@
 #define NOKIA_HEIGHT 48
 #define NOKIA_FRAMEBUFFER_SIZE (NOKIA_HEIGHT * NOKIA_WIDTH) / 8
 
+
 typedef struct goto_room {
     int x;
     int y;
 } goto_room_t;
 
+
 typedef struct frame_buffer{
     uint8_t buffer[NOKIA_FRAMEBUFFER_SIZE];
 }frame_buffer_t;
+
 
 typedef struct buffer_render_nokia{
     int (*init)();
@@ -34,21 +37,24 @@ typedef struct buffer_render_nokia{
     void (*framebuffer_flush)(frame_buffer_t* buffer);
 }buffer_render_nokia_t;
 
+
 typedef struct pnuk_data{
     volatile int pnuk_val;
     volatile int pnuk_delta;
     volatile int btn_stat;
 }pnuk_data_t;
 
+
 typedef struct room_ctx {
     buffer_render_nokia_t *nokia_render;
-    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
+    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE]; //predelat na [x][y][val, pnukA val, pnukB val, pnukC val]
+    volatile int (*matrix)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK + 1]; //new
     miniosc *pane_osc;
     pnuk_data_t *pnuky;
     int menu_x;
     int menu_y;
     frame_buffer_t *fb;
-    volatile int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
+    int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
 }room_ctx_t;
 
 
