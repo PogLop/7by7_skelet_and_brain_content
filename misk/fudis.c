@@ -24,12 +24,9 @@ t_foodis *FOODISprepstruct(const int fport, const char fip[])
 
 void FOODISmail(t_foodis *f, char fdata[], const char route[])
 {
-    const char *ipa;
     struct sockaddr_in si;
-    int scfd, port, silen = sizeof(si);
-
-    port = f->port;
-    ipa = f->ip;
+    int scfd, silen = sizeof(si);
+    char send[strlen(fdata) + strlen(route) + 1];
 
     if( (scfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
@@ -47,9 +44,13 @@ void FOODISmail(t_foodis *f, char fdata[], const char route[])
     }
 
     //send!!!!
-    if(sendto(scfd, fdata, strlen(fdata), 0, (struct sockaddr *)&si, silen) == -1)
+    //printf("posilam <%s> na port %d a ip %s", fdata, f->port, f->ip);
+
+    snprintf(send, sizeof(send), "%s\x20%s", route, fdata);
+
+    if(sendto(scfd, send, strlen(send), 0, (struct sockaddr *)&si, silen) == -1)
     {
-        FOODISerrr("sendto :( fruck");
+        FOODISerrr("sendto failed");
     }
 
     close(scfd);

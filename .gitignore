@@ -7,3 +7,4 @@ pcb/~77_m_pcb_2.kicad_sch.lck
 pcb/77_m_pcb_2.kicad_sch.lck
 pd_outsiders/*.pd_*
 pd_outsiders/*.pd_*.o
+misk/*.o
