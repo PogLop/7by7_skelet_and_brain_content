@@ -47,14 +47,13 @@ typedef struct pnuk_data{
 
 typedef struct room_ctx {
     buffer_render_nokia_t *nokia_render;
-    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE]; //predelat na [x][y][val, pnukA val, pnukB val, pnukC val]
-    volatile int (*matrix)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK + 1]; //new
+    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
+    int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
     miniosc *pane_osc;
     pnuk_data_t *pnuky;
     int menu_x;
     int menu_y;
     frame_buffer_t *fb;
-    int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
 }room_ctx_t;
 
 

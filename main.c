@@ -135,11 +135,6 @@ int main(int argc, char **argv)
 	int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
 	memset(matrix_state, 0, sizeof(matrix_state));
 
-	//matrix2
-	int matrix[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK + 1]; //3pnuky+hodnotabodu
-	memset(matrix, 0, sizeof(matrix));
-
-
 	//pnuktrix
 	int matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
     memset(matrix_value_array, 0, sizeof(matrix_value_array));
@@ -228,9 +223,8 @@ int main(int argc, char **argv)
 		room_ctx_t ctx = {
 			.nokia_render = &nokia,
 			.matrix_state = &matrix_state,
-			.matrix = &matrix,
-			.pane_osc = osc,
 			.pnuky = data_z_pnuku,
+			.pane_osc = osc,
 			.menu_x = mi_x,
 			.menu_y = mi_y,
 			.fb = &bff,

@@ -1,0 +1,14 @@
+#N canvas 367 172 450 300 12;
+#X obj 130 114 fudiparse;
+#X msg 123 20 listen 4789;
+#X obj 84 196 print;
+#X listbox 147 188 20 0 0 0 - - - 0;
+#X obj 130 54 netreceive;
+#X obj 131 82 fudiformat;
+#X obj 130 138 route /blabla/cus;
+#X connect 0 0 6 0;
+#X connect 1 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 0 0;
+#X connect 6 0 2 0;
+#X connect 6 0 3 0;

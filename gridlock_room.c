@@ -101,18 +101,30 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
                 minioscSend(ctx->pane_osc, osc_addr_pnuky, ",i", ctx->matrix_pnuk_state[0][a][b][c]);
             }
 
-            //draw xxxxxxxxx
+            //draw xxxxxxxxx xoxo mwuah
             if(ctx->matrix_state[0][b][a])
             {
-                nokia_draw_line(ctx->fb, (goto_room_t){a*grid_cell, b*grid_cell}, (goto_room_t){a*grid_cell+grid_cell, b*grid_cell+grid_cell}, 0);
+                nokia_draw_line(ctx->fb, 
+                    (goto_room_t){a*grid_cell, b*grid_cell}, 
+                    (goto_room_t){a*grid_cell+grid_cell, b*grid_cell+grid_cell}, 
+                    0);
             }
         }
     }
 
+
+    //draw the grid
     for(int g = 0; g <= MATRIX_SIZE; g++)
     {
-        nokia_draw_line(ctx->fb, (goto_room_t){g * grid_cell, 0}, (goto_room_t){g * grid_cell, grid_scale}, 0);
-        nokia_draw_line(ctx->fb, (goto_room_t){0, g * grid_cell}, (goto_room_t){grid_scale, g * grid_cell}, 0);
+        nokia_draw_line(ctx->fb, 
+            (goto_room_t){g * grid_cell, 0}, 
+            (goto_room_t){g * grid_cell, grid_scale}, 
+            0);
+        
+        nokia_draw_line(ctx->fb, 
+            (goto_room_t){0, g * grid_cell}, 
+            (goto_room_t){grid_scale, g * grid_cell}, 
+            0);
     }
 
 
@@ -121,7 +133,10 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         cursor.y * grid_cell
     };
 
-    nokia_draw_rectal(ctx->fb, draw_pos, (goto_room_t){draw_pos.x + grid_cell, draw_pos.y + grid_cell}, 1);
+    nokia_draw_rectal(ctx->fb, 
+        draw_pos, 
+        (goto_room_t){draw_pos.x + grid_cell, draw_pos.y + grid_cell}, 
+        1);
 
     nokia_framebuffer_flush(ctx->fb);
 

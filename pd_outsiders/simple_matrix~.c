@@ -96,7 +96,7 @@ t_int *simple_matrix_tilde_perform(t_int *w)
     out = (t_float *)(w[OUTS_OFF + xx]);
     memset(out, 0, sizeof(t_float) * len);
 
-    out = (t_float *)(w[OUTS_OFF + xx]);
+
     for(yy = 0; yy < MATRIX_SIZE; yy++)
     {
       inu = (t_float *)(w[INS_OFF + yy]);

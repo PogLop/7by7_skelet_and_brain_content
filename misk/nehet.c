@@ -7,42 +7,56 @@
 //data se prenasi tak jak jsou, je treba znat strukturu aby se to dalo dekodovat. asi ok?
 //pointless copying of ints into chars and wasting memory, what a day
 
-char *FORMATMATRIX(int *matrix, int sizea, int sizeb)
+//...1 023
+
+char *FORMATRIX(int *matrix, int sizea, int sizeb) 
 {
-    char *turin = malloc(sizea * sizeb); 
+    char *turin = (char *)malloc(sizea * sizeb * sizeof(char));
+    int inde,a,b; //x
     //dear, do not forget to call free later please
 
-    for(int a = 0; a < sizea; a++)
+    for(a = 0; a < sizea; a++)
     {
-        for(int b = 0; b < sizeb; b++)
+        for(b = 0; b < sizeb; b++)
         {
-            turin[a * sizeb + b] = *(matrix + a * sizeb + b) - '0';
+            inde = (a * MATRIX_SIZE) + b;
+            turin[inde] = *(matrix + inde) - '0';
         }
     }
     
     return turin;
 }
 
-char *FORMATPNUKMATRIX(int *pmatrix, int sizea, int sizeb, int sizec)
+int **UNFORMATRIX(char *matrix, int sizea, int sizeb)
 {
-    char *turin = malloc(sizea * sizeb * sizec);
-    int inde; //x
-    //dear, do not forget to call free later please
-
-    for(int a = 0; a < sizea; a++)
+    int h, index, y;
+    int **r = (int **)malloc(sizeof(int *) * sizea);
+    
+    for(h = 0; h < sizeb; h++)
     {
-        for(int b = 0; b < sizeb; b++)
+        r[h] = (int *)malloc(sizeof(int) * sizeb);
+    }
+
+    for(h = 0; h < sizea; h++)
+    {
+        for(y = 0; y < sizeb; y++)
         {
-            for(int c = 0; c < sizec; c++)
-            {
-                inde = a + (b * sizea) + (c * sizea * sizeb);
-                turin[inde] = *(pmatrix + inde) - '0';
-            }
+            index = (h * MATRIX_SIZE) + y;
+            r[h][y] = matrix[index] + '0';
         }
     }
 
-    return turin;
+    return r;
 }
+
+char *FORMATPNUKTRIX(int *matrix, int sizea, int sizeb, int sizec)
+{
+    char *r = (char *)malloc(sizea * sizeb * (sizec * 3)); //sizec -->– kolik je pnuku; 3 -->- 3 digit value
+
+    return r;
+}
+
+int *UNFORMATPNUKTRIX(char *matrix, int sizea, int sizeb, int sizec);
 
 int DIDTHEMATRIXCHANGE(int *matrix, int c, ...) //dimensions
 {
