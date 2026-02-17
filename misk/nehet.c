@@ -19,24 +19,24 @@
 
 //list 0 0 A 342;
 
-char *FORMATRIX(int16_t *matrix, int8_t sizea, int8_t sizeb, int8_t offs) 
+char *FORMATRIX(int16_t *matrix, int8_t sizea, int8_t sizeb) 
 {
-    char *turin = (char *)malloc(sizea * sizeb * sizeof(char) * 2 + offs);
+    char *turin = (char *)malloc(sizea * sizeb * sizeof(char) * 2);
     int8_t a,b,num,ind;
     //dear, do not forget to call free later please
 
     for(a = 0; a < sizea; a++)
     {
-        for(b = 0; b < sizeb*2; b+=2)
+        for(b = 0; b < sizeb; b++)
         {
             //printf("%d", b);
-            ind = (a * sizeb) + b/2;
+            ind = (a * sizeb) + b;
             num = *(matrix + ind) + '0';
 
-            ind = (a * sizeb * 2) + b;
+            ind = (a * sizeb * 2) + b * 2;
 
             turin[ind] = num;
-            turin[ind+1] = '\x20';
+            turin[ind + 1] = '\x20';
         }
     }
     

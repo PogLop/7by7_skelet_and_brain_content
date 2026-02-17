@@ -12,6 +12,7 @@
 #include "pnuk_driver.h"
 #include "deda.h"
 #include "misk/fudis.h"
+#include "misk/nehet.h"
 
 
 //menu includerationoles
@@ -27,6 +28,7 @@
 #include "gridlock_room.c"
 #include "deda.c"
 #include "misk/fudis.c"
+#include "misk/nehet.c"
 
 
 #define P_IN PI_INPUT

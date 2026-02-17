@@ -2,12 +2,14 @@
 #include "komplex_budov_data.h"
 #include "halohalo_buffer.h"
 #include "misk/fudis.h"
+#include "misk/nehet.h"
 
 
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 
 
@@ -25,7 +27,9 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
 
 
     memset(ctx->fb->buffer, 0x0, sizeof(ctx->fb->buffer));
-    char _send_bf[20];
+    
+    char _send_pnuk[20];
+    char _send_m[60];
     
     
     uint8_t grid_cell = 5;
@@ -56,7 +60,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] += ctx->pnuky[0].pnuk_delta;
 
-            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+            snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
                 cursor.x, 
                 cursor.y, 
                 0,
@@ -68,7 +72,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1] += ctx->pnuky[1].pnuk_delta;
 
-            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+            snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
                 cursor.x, 
                 cursor.y, 
                 1,
@@ -80,7 +84,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2] += ctx->pnuky[2].pnuk_delta;
 
-            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+            snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
                 cursor.x, 
                 cursor.y, 
                 2,
@@ -116,6 +120,10 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             //matrix/rx/cx
             //pnuky/rx/cx/px
+            
+            snprintf(_send_m, sizeof(_send_m), "list\x20%s;", FORMATRIX((int16_t *)ctx->matrix_state, 7, 7));
+            
+            FOODISmail(ctx->food, _send_m, "/matrix");
 
             //draw xxxxxxxxx xoxo mwuah
             if(ctx->matrix_state[0][b][a])
