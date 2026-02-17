@@ -3,6 +3,7 @@
 #include "pnuk.h"
 
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 
 pnuk_data_t return_data[PNUKU_JE_TOLIK];
@@ -13,8 +14,8 @@ void pnuk_callback_ABC(int value, int id)
 {
     pnuk_data_t *data = &return_data[id];
     
-    data->pnuk_val += value;
-    data->pnuk_delta = value; //každá místnost musí po přečtení delta (levo nebio pravo) tuto hodnotu nastavit na 0!
+    data->pnuk_val += (int16_t)value;
+    data->pnuk_delta = (int8_t)value; //každá místnost musí po přečtení delta (levo nebio pravo) tuto hodnotu nastavit na 0!
     //brouku
     printf("%d\n", data->pnuk_val);
 }
@@ -22,7 +23,7 @@ void pnuk_callback_ABC(int value, int id)
 void pnuk_btn_callback_ABC(int value, int id)
 {
     pnuk_data_t *data = &return_data[id];
-    if(value) data->btn_stat = value;
+    if(value) data->btn_stat = (int8_t)value;
     printf("%d knoflik\n", value);
 }
 

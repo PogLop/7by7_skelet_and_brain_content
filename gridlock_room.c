@@ -1,11 +1,14 @@
 #include "gridlock_room.h"
 #include "komplex_budov_data.h"
 #include "halohalo_buffer.h"
+#include "misk/fudis.h"
+
+
 #include <stdio.h>
 #include <string.h>
-#include "stdbool.h"
+#include <stdbool.h>
+#include <stdint.h>
 
-#include "miniosc/miniosc.h"
 
 
 goto_room_t cursor = {0, 0};
@@ -22,10 +25,11 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
 
 
     memset(ctx->fb->buffer, 0x0, sizeof(ctx->fb->buffer));
+    char _send_bf[20];
     
     
-    int grid_cell = 5;
-    int grid_scale = (MATRIX_SIZE * grid_cell);
+    uint8_t grid_cell = 5;
+    uint8_t grid_scale = (MATRIX_SIZE * grid_cell);
 
     if(!value_mode)
     {
@@ -51,20 +55,41 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         if(ctx->pnuky[0].pnuk_delta != 0)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] += ctx->pnuky[0].pnuk_delta;
+
+            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+                cursor.x, 
+                cursor.y, 
+                0,
+                ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0]);
+            FOODISmail(ctx->food, "", "/pnuky");
         }
         
         if(ctx->pnuky[1].pnuk_delta != 0)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1] += ctx->pnuky[1].pnuk_delta;
+
+            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+                cursor.x, 
+                cursor.y, 
+                1,
+                ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1]);
+            FOODISmail(ctx->food, "", "/pnuky");
         }
         
         if(ctx->pnuky[2].pnuk_delta != 0)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2] += ctx->pnuky[2].pnuk_delta;
+
+            snprintf(_send_bf, sizeof(_send_bf), "list\x20%d\x20%d\x20%d\x20%d;", 
+                cursor.x, 
+                cursor.y, 
+                2,
+                ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2]);
+            FOODISmail(ctx->food, "", "/pnuky");
         }
 
         
-        ctx->pnuky[0].pnuk_delta = 0;
+        ctx->pnuky[0].pnuk_delta = 0; //priste asi implementuju state machine, tohle je ass149(c) fakt
         ctx->pnuky[1].pnuk_delta = 0;
         ctx->pnuky[2].pnuk_delta = 0;
         
@@ -89,17 +114,8 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     {
         for(int b = 0; b < MATRIX_SIZE; b++)
         {
-            char osc_addr[50];
-            char osc_addr_pnuky[50];
-            snprintf(osc_addr, sizeof(osc_addr), "/matrix/r%d/c%d", a, b);
-            
-            minioscSend(ctx->pane_osc, osc_addr, ",i", ctx->matrix_state[0][a][b]);
-            
-            for(int c = 0; c < PNUKU_JE_TOLIK; c++)
-            {
-                snprintf(osc_addr_pnuky, sizeof(osc_addr_pnuky), "/pnuk/r%d/c%d/p%d", a, b, c);
-                minioscSend(ctx->pane_osc, osc_addr_pnuky, ",i", ctx->matrix_pnuk_state[0][a][b][c]);
-            }
+            //matrix/rx/cx
+            //pnuky/rx/cx/px
 
             //draw xxxxxxxxx xoxo mwuah
             if(ctx->matrix_state[0][b][a])

@@ -11,6 +11,7 @@
 #include "pnuk.h"
 #include "pnuk_driver.h"
 #include "deda.h"
+#include "misk/fudis.h"
 
 
 //menu includerationoles
@@ -25,11 +26,7 @@
 #include "room.c"
 #include "gridlock_room.c"
 #include "deda.c"
-
-
-//klasicka single-header knihovna [coo? :O]
-#define MINIOSC_IMPLEMENTATION
-#include "miniosc/miniosc.h"
+#include "misk/fudis.c"
 
 
 #define P_IN PI_INPUT
@@ -132,11 +129,11 @@ int main(int argc, char **argv)
 
 	
 	//matrix
-	int matrix_state[MATRIX_SIZE][MATRIX_SIZE];
+	int16_t matrix_state[MATRIX_SIZE][MATRIX_SIZE];
 	memset(matrix_state, 0, sizeof(matrix_state));
 
 	//pnuktrix
-	int matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
+	int16_t matrix_value_array[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
     memset(matrix_value_array, 0, sizeof(matrix_value_array));
 
 
@@ -170,8 +167,10 @@ int main(int argc, char **argv)
 	pnuk_init(enkodery);
 
 
-	//osc
-	miniosc *osc = minioscInit(7000, 7777, "127.0.0.1", 0);
+	//osc vyslo z mody
+	//miniosc *osc = minioscInit(7000, 7777, "127.0.0.1", 0);
+	//foodis
+	t_foodis *foo = FOODISprepstruct(7777, "127.0.0.1");
 
 
 	//nokia
@@ -224,7 +223,7 @@ int main(int argc, char **argv)
 			.nokia_render = &nokia,
 			.matrix_state = &matrix_state,
 			.pnuky = data_z_pnuku,
-			.pane_osc = osc,
+			.food = foo,
 			.menu_x = mi_x,
 			.menu_y = mi_y,
 			.fb = &bff,
@@ -247,6 +246,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
+	FOODISkonec(foo);
 	pnuk_driver_de_init();
 	gpioTerminate();
 

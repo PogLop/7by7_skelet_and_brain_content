@@ -1,6 +1,7 @@
 #pragma once
 
-#include "miniosc/miniosc.h"
+//#include "miniosc/miniosc.h" historie
+#include "misk/fudis.h"
 #include <stdint.h>
 
 #define PNUKU_JE_TOLIK 3
@@ -39,17 +40,17 @@ typedef struct buffer_render_nokia{
 
 
 typedef struct pnuk_data{
-    volatile int pnuk_val;
-    volatile int pnuk_delta;
-    volatile int btn_stat;
+    volatile int16_t pnuk_val;
+    volatile int8_t pnuk_delta;
+    volatile int8_t btn_stat;
 }pnuk_data_t;
 
 
 typedef struct room_ctx {
     buffer_render_nokia_t *nokia_render;
-    int (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
-    int (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
-    miniosc *pane_osc;
+    int16_t (*matrix_state)[MATRIX_SIZE][MATRIX_SIZE];
+    int16_t (*matrix_pnuk_state)[MATRIX_SIZE][MATRIX_SIZE][PNUKU_JE_TOLIK];
+    t_foodis *food;
     pnuk_data_t *pnuky;
     int menu_x;
     int menu_y;
