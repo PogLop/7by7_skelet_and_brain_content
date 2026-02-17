@@ -1,6 +1,7 @@
 #pragma once
 
-//#include "miniosc/miniosc.h" historie
+//pardon za tenhle soubor
+//#include "miniosc/miniosc.h" to uz je historie
 #include "misk/fudis.h"
 #include <stdint.h>
 
@@ -19,7 +20,8 @@ typedef struct goto_room {
 
 typedef struct frame_buffer{
     uint8_t buffer[NOKIA_FRAMEBUFFER_SIZE];
-}frame_buffer_t;
+    uint8_t o_buffer[NOKIA_FRAMEBUFFER_SIZE];
+}frame_buffer_t; //+-1kb
 
 
 typedef struct buffer_render_nokia{

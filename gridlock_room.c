@@ -25,15 +25,16 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         ctx->menu_y        
     };
 
-
     memset(ctx->fb->buffer, 0x0, sizeof(ctx->fb->buffer));
+    //memset(ctx->fb->o_buffer, 0x0, sizeof(ctx->fb->o_buffer));
     
     char _send_pnuk[20];
     char _send_m[60];
-    
+    char *_tmp;
     
     uint8_t grid_cell = 5;
     uint8_t grid_scale = (MATRIX_SIZE * grid_cell);
+
 
     if(!value_mode)
     {
@@ -60,12 +61,14 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] += ctx->pnuky[0].pnuk_delta;
 
+            //FUDI format; "list x y id val";
+            ////////////////
             snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
                 cursor.x, 
                 cursor.y, 
                 0,
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0]);
-            FOODISmail(ctx->food, "", "/pnuky");
+            FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
         
         if(ctx->pnuky[1].pnuk_delta != 0)
@@ -77,7 +80,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
                 cursor.y, 
                 1,
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1]);
-            FOODISmail(ctx->food, "", "/pnuky");
+            FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
         
         if(ctx->pnuky[2].pnuk_delta != 0)
@@ -89,7 +92,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
                 cursor.y, 
                 2,
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][2]);
-            FOODISmail(ctx->food, "", "/pnuky");
+            FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
 
         
@@ -113,18 +116,18 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     }
     last_btn2_sate = ctx->pnuky[2].btn_stat;
 
+    //send matrix data to pd
+    _tmp = FORMATRIX((int16_t *)ctx->matrix_state, 7, 7);
+    
+    snprintf(_send_m, sizeof(_send_m), "list\x20%s;", _tmp);
+    FOODISmail(ctx->food, _send_m, "/matrix");
+
+    free(_tmp);
 
     for(int a = 0; a < MATRIX_SIZE; a++)
     {
         for(int b = 0; b < MATRIX_SIZE; b++)
         {
-            //matrix/rx/cx
-            //pnuky/rx/cx/px
-            
-            snprintf(_send_m, sizeof(_send_m), "list\x20%s;", FORMATRIX((int16_t *)ctx->matrix_state, 7, 7));
-            
-            FOODISmail(ctx->food, _send_m, "/matrix");
-
             //draw xxxxxxxxx xoxo mwuah
             if(ctx->matrix_state[0][b][a])
             {
@@ -161,8 +164,15 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         draw_pos, 
         (goto_room_t){draw_pos.x + grid_cell, draw_pos.y + grid_cell}, 
         1);
+    
 
-    nokia_framebuffer_flush(ctx->fb);
+    if(!CMPbuffer(ctx->fb->o_buffer, ctx->fb->buffer, NOKIA_FRAMEBUFFER_SIZE)) //fix
+    {
+        nokia_framebuffer_flush(ctx->fb);
+    }
 
-    return return_nav_state;
+    memcpy(ctx->fb->o_buffer, ctx->fb->buffer, sizeof(ctx->fb->buffer));
+
+
+    return return_nav_state; //importnatan
 }

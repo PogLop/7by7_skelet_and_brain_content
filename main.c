@@ -197,7 +197,8 @@ int main(int argc, char **argv)
 
 	//framebuunkr oj7783
 	frame_buffer_t bff;
-	memset(&bff, 0x0, sizeof(bff));
+	memset(bff.buffer, 0x0, sizeof(bff.buffer));
+	memset(bff.o_buffer, 0x0, sizeof(bff.o_buffer));
 
 
 	//main event going round n round

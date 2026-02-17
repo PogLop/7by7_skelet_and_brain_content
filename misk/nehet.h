@@ -3,6 +3,12 @@
 #include <stdint.h>
 
 char *FORMATRIX(int16_t *matrix, int8_t sizea, int8_t sizeb);
+int CMPbuffer(uint8_t *m1, uint8_t *m2, int16_t sizea);
+
+
+
+
+//delulu thesis
 //int **UNFORMATRIX(char *matrix, int sizea, int sizeb);
 
 //ver specific function, that turns 3 dimensional array into single dimension

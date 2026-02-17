@@ -43,8 +43,23 @@ char *FORMATRIX(int16_t *matrix, int8_t sizea, int8_t sizeb)
     return turin;
 }
 
+int CMPbuffer(uint8_t *m1, uint8_t *m2, int16_t sizea)
+{
+    int a;
 
-/* unused :O)
+    for(a = 0; a < sizea; a++)
+    {
+        if(*(m1 + a) != *(m2 + a))
+        {
+            return 0;
+        } else continue;
+    }
+
+    return 1;
+}
+
+
+/* unused </3
 
 int **UNFORMATRIX(char *matrix, int sizea, int sizeb)
 {
