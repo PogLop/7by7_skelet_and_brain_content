@@ -9,3 +9,24 @@ Pd externals locations on various operating systems relevant to scope of this de
 
 
 printf format specifiers
+
+
+pigpio
+-
+wget https://github.com/joan2937/pigpio/archive/master.zip
+unzip master.zip
+cd pigpio-master
+make
+...
+sudo apt install python-setuptools python3-setuptools
+sudo make install
+--konec--
+
+
+
+sudo apt-get install puredata
+
+
+
+dtparam=audio=on
+dtoverlay=audremap,pins_12_13 
