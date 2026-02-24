@@ -14,7 +14,7 @@ void FOODISerrr(const char *err)
 
 t_foodis *FOODISprepstruct(const int fport, const char fip[])
 {
-    t_foodis *r = malloc(sizeof(t_foodis));
+    t_foodis *r = (t_foodis *)malloc(sizeof(t_foodis));
 
     r->port = fport;
     r->ip = fip;

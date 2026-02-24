@@ -43,7 +43,7 @@ char *FORMATRIX(int16_t *matrix, int8_t sizea, int8_t sizeb)
     return turin;
 }
 
-int CMPbuffer(uint8_t *m1, uint8_t *m2, int16_t sizea)
+int CMPbuffer(uint8_t *m1, uint8_t *m2, int16_t sizea) //spis matrix
 {
     int a;
 
@@ -85,7 +85,7 @@ int **UNFORMATRIX(char *matrix, int sizea, int sizeb)
 
 char *FORMATPNUKTRIX(int16_t *matrix, int sizea, int sizeb, int sizec, int offset)
 {
-    char *r = malloc(sizea * sizeb * sizec * sizeof(int16_t) + offset); //predikce (7 * 7 * 3 * 2) + 6
+    char *r =(char *) malloc(sizea * sizeb * sizec * sizeof(int16_t) + offset); //predikce (7 * 7 * 3 * 2) + 6
     int16_t a, b, c, i, num;
     char sp = '\x20'; 
     unsigned char byts[2];

@@ -24,10 +24,10 @@ int main(void)
 
     free(buffer);
 
-    if(MATRIXCMP((int16_t *)arr, (int16_t *)rarr, 7, 7))
+/*     if(MATRIXCMP((int16_t *)arr, (int16_t *)rarr, 7, 7))
     {
         printf("mathiiiing\n");
-    }
+    } */
 
     return 0;
 }

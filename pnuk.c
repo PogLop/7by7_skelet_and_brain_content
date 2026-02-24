@@ -47,6 +47,9 @@ static void _knofl_callback(int gpio, int level, uint32_t tick, void *user)
 	if(!level) { pnuk->knoflCallback(1, pnuk -> id); }
 }
 
+
+
+//thanks much for debounce logic, mr. who wrote examples for pigpio
 static void _callback(int gpio, int level, uint32_t tick, void *user)
 {
 	pnukT *pnuk;
@@ -74,7 +77,7 @@ pnukT * pnukPnuk(int id, int gpioA, int gpioB, int knoflPin, pnukCallMeBackT cal
 {
 	pnukT *pnuk;
 
-	pnuk = malloc(sizeof(pnukT));
+	pnuk = (pnukT *)malloc(sizeof(pnukT));
 
 	pnuk -> gpioA = gpioA;
 	pnuk -> gpioB = gpioB;

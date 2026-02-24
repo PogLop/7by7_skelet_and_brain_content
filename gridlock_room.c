@@ -165,14 +165,16 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         (goto_room_t){draw_pos.x + grid_cell, draw_pos.y + grid_cell}, 
         1);
     
-
+        //finish
     if(!CMPbuffer(ctx->fb->o_buffer, ctx->fb->buffer, NOKIA_FRAMEBUFFER_SIZE)) //fix
     {
-        nokia_framebuffer_flush(ctx->fb);
+        //nokia_framebuffer_flush(ctx->fb);
     }
-
-    memcpy(ctx->fb->o_buffer, ctx->fb->buffer, sizeof(ctx->fb->buffer));
-
+    //finish this
+    
+    //memcpy(ctx->fb->o_buffer, ctx->fb->buffer, sizeof(ctx->fb->buffer));
+    
+    nokia_framebuffer_flush(ctx->fb);
 
     return return_nav_state; //importnatan
 }

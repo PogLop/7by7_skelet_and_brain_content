@@ -5,9 +5,8 @@ static t_class *changes_class;
 
 typedef struct _changes {
     t_object x_obj;
-
+    
     t_symbol *rpev;
-
     t_outlet *sout;
 } t_changes;
 

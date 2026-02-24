@@ -52,7 +52,7 @@ stack based menu system anti-thesis
 //integer to array of 0 and 1
 uint8_t *itb(uint8_t k, int size)
 {
-	uint8_t *output = malloc(size);
+	uint8_t *output = (uint8_t *)malloc(size);
 
 	if(!output) return NULL;
 
