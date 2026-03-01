@@ -1,5 +1,5 @@
 pcb/
-./git
+.git/
 .gitignore
 .gitmodules
 *.o

@@ -6,7 +6,6 @@ PD_LIB = pd_outsiders/*.$(ARCHITEKTURA)
 PD_LIB_SOURCE = $(wildcard pd_outsiders/*.c)
 
 all: main.o $(PD_LIB)
-	make clean
 
 help:
 	@echo "make test"

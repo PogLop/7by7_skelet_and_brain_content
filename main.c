@@ -1,3 +1,6 @@
+//make clean && sudo make && sudo ./main.o
+
+
 #include <pigpio.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -18,15 +21,15 @@
 
 //menu includerationoles
 #include "room.h"
+#include "room.c"
 #include "gridlock_room.h"
+#include "gridlock_room.c"
 
 
 //implementationoies
 #include "halohalo_buffer.c"
 #include "pnuk.c"
 #include "pnuk_driver.c"
-#include "room.c"
-#include "gridlock_room.c"
 #include "deda.c"
 #include "misk/fudis.c"
 #include "misk/nehet.c"
@@ -213,7 +216,7 @@ int main(int argc, char **argv)
 			{
 				gpioWrite(MUX_A_COM, 1);
 				setMuxAddr(b, a);
-				gpioDelay(5);
+				gpioDelay(200);
 				matrix_state[a][b] = gpioRead(MUX_B_COM); //write to matrix
 				gpioWrite(MUX_A_COM, 0);
 			}
@@ -221,6 +224,7 @@ int main(int argc, char **argv)
 		
 
 		//debung printf matrix
+		/* 
 		for(int a = 0; a < 7; a++)
 		{
 			for(int b = 0; b < 7; b++)
@@ -230,6 +234,7 @@ int main(int argc, char **argv)
 			printf("\n");
 		}
 		printf("\e[1;1H\e[2J");
+		*/
 
 		data_z_pnuku = pnuk_get_data();
 

@@ -11,7 +11,7 @@ static int spi;
 
 int deda_nokia_init()
 {
-    spi = spiOpen(0, 4000000, 0);
+    spi = spiOpen(0, SPI_SPEED, 0);
 
     if(spi < 0)
     {
