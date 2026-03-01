@@ -10,6 +10,8 @@
 #define NOKIA_WIDTH 84
 #define NOKIA_HEIGHT 48
 #define NOKIA_FRAMEBUFFER_SIZE (NOKIA_HEIGHT * NOKIA_WIDTH) / 8
+#define NOKIA_BANKS_X 84
+#define NOKIA_BANKS_Y 6
 
 
 typedef struct goto_room {

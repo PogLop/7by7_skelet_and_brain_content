@@ -8,11 +8,6 @@
 #include "komplex_budov_data.h"
 #include "deda.h"
 
-/* 
-	gpioSetMode(1, P_OUT); //data/command
-	gpioSetMode(16, P_OUT); //rst
-*/
-
 int nokia_init()
 {
     if(deda_nokia_init() < 0) { return -1; }

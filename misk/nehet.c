@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+//utils
+
 //data se prenasi tak jak jsou, je treba znat strukturu aby se to dalo dekodovat. asi ok?
 //pointless copying of ints into chars and wasting memory, what a day
 

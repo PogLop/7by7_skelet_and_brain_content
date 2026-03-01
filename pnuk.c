@@ -5,7 +5,7 @@
 #include "pnuk.h"
 
 
-#define P_IN PI_INPUT
+#define P_IN PI_INPUT //delat z makra makro je mozna trochu moc
 #define P_OUT PI_OUTPUT
 
 #define PL_D PI_PUD_DOWN

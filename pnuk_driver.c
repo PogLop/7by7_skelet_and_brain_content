@@ -17,7 +17,7 @@ void pnuk_callback_ABC(int value, int id)
     data->pnuk_val += (int16_t)value;
     data->pnuk_delta = (int8_t)value; //každá místnost musí po přečtení delta (levo nebio pravo) tuto hodnotu nastavit na 0!
     //brouku
-    printf("%d\n", data->pnuk_val);
+    printf("id%d val%d\n", id, data->pnuk_val);
 }
 
 void pnuk_btn_callback_ABC(int value, int id)

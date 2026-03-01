@@ -13,6 +13,7 @@
 #include "deda.h"
 #include "misk/fudis.h"
 #include "misk/nehet.h"
+#include "config.h"
 
 
 //menu includerationoles
@@ -40,11 +41,13 @@
 
 
 /*
-
 stack based menu system anti-thesis
 
 
 */
+
+
+
 #define KOMPLEX_SIZE_X 10 
 #define KOMPLEX_SIZE_Y 10
 
@@ -75,25 +78,24 @@ void setup()
 {
 	//SETUP
 	//COMM OUT/IN
-	gpioSetMode(2, P_OUT); //ST MUX
-	gpioSetMode(4, P_IN); //ND MUX
-	gpioSetPullUpDown(4, PL_D);
+	gpioSetMode(MUX_A_COM, P_OUT); //ST MUX
+	gpioSetMode(MUX_B_COM, P_IN); //ND MUX
+	gpioSetPullUpDown(MUX_B_COM, PL_D);
 
 	//MUX1 ADDR SELECT
-	gpioSetMode(17, P_OUT);
-	gpioSetMode(27, P_OUT);
-	gpioSetMode(22, P_OUT);
+	gpioSetMode(MUX_A_ADDR_1, P_OUT);
+	gpioSetMode(MUX_A_ADDR_2, P_OUT);
+	gpioSetMode(MUX_A_ADDR_3, P_OUT);
 
 	//MUX2 ADDR SELECT
-	gpioSetMode(0, P_OUT);
-	gpioSetMode(5, P_OUT);
-	gpioSetMode(6, P_OUT);
+	gpioSetMode(MUX_B_ADDR_1, P_OUT);
+	gpioSetMode(MUX_B_ADDR_2, P_OUT);
+	gpioSetMode(MUX_B_ADDR_3, P_OUT);
 
-	//nokia
-	gpioSetMode(26, P_OUT); //data/command
-	gpioSetMode(16, P_OUT); //rst
-	//gpioSetPullUpDown(16, PL_D);
-	gpioSetMode(25, P_OUT); //ce
+	//NOKAI
+	gpioSetMode(PIN_NOKIA_DC, P_OUT); //data/command
+	gpioSetMode(PIN_NOKIA_RST, P_OUT); //rst
+	gpioSetMode(PIN_NOKIA_CE, P_OUT); //ce
 	//SETUP END :(
 
 	printf("77ready asi? :o)77\n");
@@ -110,12 +112,12 @@ void setMuxAddr(uint8_t st_mux, uint8_t nd_mux)
 
 	if(mx_one && mx_two)
 	{
-		gpioWrite(17, mx_one[0]);
-		gpioWrite(27, mx_one[1]);
-		gpioWrite(22, mx_one[2]);
-		gpioWrite(0, mx_two[0]);
-		gpioWrite(5, mx_two[1]);
-		gpioWrite(6, mx_two[2]);
+		gpioWrite(MUX_A_ADDR_1, mx_one[0]);
+		gpioWrite(MUX_A_ADDR_2, mx_one[1]);
+		gpioWrite(MUX_A_ADDR_3, mx_one[2]);
+		gpioWrite(MUX_B_ADDR_1, mx_two[0]);
+		gpioWrite(MUX_B_ADDR_2, mx_two[1]);
+		gpioWrite(MUX_B_ADDR_3, mx_two[2]);
 
 		free(mx_one);
 		free(mx_two);
@@ -162,9 +164,9 @@ int main(int argc, char **argv)
 	pnuk_data_t *data_z_pnuku;
 
 	pnuk_config_t enkodery[PNUKU_JE_TOLIK] = {
-		{.gpioA = 20, .gpioB = 21, .knoflPin = 1},		
-		{.gpioA = 15, .gpioB = 14, .knoflPin = 18},		
-		{.gpioA = 23, .gpioB = 24, .knoflPin = 19},
+		{.gpioA = PIN_A_PNUK_A, .gpioB = PIN_B_PNUK_A, .knoflPin = PIN_KNOFL_PNUK_A},		
+		{.gpioA = PIN_A_PNUK_B, .gpioB = PIN_B_PNUK_B, .knoflPin = PIN_KNOFL_PNUK_B},		
+		{.gpioA = PIN_A_PNUK_C, .gpioB = PIN_B_PNUK_C, .knoflPin = PIN_KNOFL_PNUK_C},
 	};
 	pnuk_init(enkodery);
 
@@ -209,14 +211,25 @@ int main(int argc, char **argv)
 			//read datat from like the matrix thinf
 			for(int b = 0; b < 7; b++)
 			{
-				gpioWrite(2, 1);
+				gpioWrite(MUX_A_COM, 1);
 				setMuxAddr(b, a);
 				gpioDelay(5);
-				matrix_state[a][b] = gpioRead(4); //write to matrix
-				gpioWrite(2, 0);
+				matrix_state[a][b] = gpioRead(MUX_B_COM); //write to matrix
+				gpioWrite(MUX_A_COM, 0);
 			}
 		}
 		
+
+		//debung printf matrix
+		for(int a = 0; a < 7; a++)
+		{
+			for(int b = 0; b < 7; b++)
+			{
+				printf("%d", matrix_state[a][b]);
+			}
+			printf("\n");
+		}
+		printf("\e[1;1H\e[2J");
 
 		data_z_pnuku = pnuk_get_data();
 
