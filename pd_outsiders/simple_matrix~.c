@@ -39,29 +39,6 @@ typedef struct _simple_matrix_tilde
 
 void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
 {
-  //int k;
-  //int l;
-  
-  
-  //memcpy(x->recv, s->s_name, TRANSM_SIZE); //null terminated, takze 3
-  //sometimes the size is for some reason larger, maybe UDP? crazy guy
-  //snad to nevybouchne
-  /*
-  for(l = 0; l < MATRIX_SIZE; l++)
-  {
-    for(k = 0; k < MATRIX_SIZE; k++)
-    {
-      x->val = x->recv[(l * MATRIX_SIZE) + k + 0] - '0';
-      x->posx = x->recv[(l * MATRIX_SIZE) + k + 1] - '0';
-      x->posy = x->recv[(l * MATRIX_SIZE) + k + 2] - '0';
-      
-      x->m_state[x->posx][x->posy] = x->val;
-    }
-  } 
-  */
-
-  //if(s->s_name[0] == 'c') memset((void *)x->m_state, 0, sizeof(x->m_state)); return; //:)
-  
   x->val = s->s_name[0] - '0';
   x->posx = s->s_name[1] - '0';
   x->posy = s->s_name[2] - '0';
@@ -78,6 +55,7 @@ void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
   }
   printf("\n\n");
 }
+
 
 t_int *simple_matrix_tilde_perform(t_int *w)
 {
@@ -167,8 +145,8 @@ void simple_matrix_tilde_freedom(t_simple_matrix_tilde *x)
 
   inlet_free(x->sym_in_on);
 
-  for(j = 0; j < MATRIX_SIZE; j++) { outlet_free(x->outs[j]); }
   for(j = 0; j < (MATRIX_SIZE - 1); j++) { inlet_free(x->ins[j]); }
+  for(j = 0; j < MATRIX_SIZE; j++) { outlet_free(x->outs[j]); }
 }
 
 void simple_matrix_tilde_setup(void)

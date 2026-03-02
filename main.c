@@ -124,7 +124,7 @@ void setMuxAddr(uint8_t st_mux, uint8_t nd_mux)
 
 		free(mx_one);
 		free(mx_two);
-	}
+	} else { printf("failed to mallocate addresse buf for MUXes"); exit(1); }
 }
 
 int main(int argc, char **argv)
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 	memset(bff.o_buffer, 0x0, sizeof(bff.o_buffer));
 
 
-	//main event going round n round
+	//main event going round n round loop
 	while(1)
 	{
 		for(int a = 0; a < 7; a++)
@@ -214,9 +214,9 @@ int main(int argc, char **argv)
 			//read datat from like the matrix thinf
 			for(int b = 0; b < 7; b++)
 			{
-				gpioWrite(MUX_A_COM, 1);
 				setMuxAddr(b, a);
-				gpioDelay(200);
+				gpioWrite(MUX_A_COM, 1);
+				gpioDelay(600);
 				matrix_state[a][b] = gpioRead(MUX_B_COM); //write to matrix
 				gpioWrite(MUX_A_COM, 0);
 			}

@@ -1,0 +1,13 @@
+#N canvas 425 245 450 300 12;
+#X msg 151 108 400;
+#X obj 119 65 loadbang;
+#X obj 151 157 osc~;
+#X obj 151 213 dac~;
+#X obj 47 114 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X msg 56 141 \; pd dsp \$1;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 5 0;

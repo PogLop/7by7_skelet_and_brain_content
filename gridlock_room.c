@@ -28,8 +28,8 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     memset(ctx->fb->buffer, 0x0, sizeof(ctx->fb->buffer));
     //memset(ctx->fb->o_buffer, 0x0, sizeof(ctx->fb->o_buffer));
     
-    char _send_pnuk[20];
-    char _send_m[60];
+    char _send_pnuk[32];
+    char _send_m[64];
     char *_tmp;
     
     uint8_t grid_cell = 5;
@@ -61,13 +61,16 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         {
             ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0] += ctx->pnuky[0].pnuk_delta;
 
-            //FUDI format; "list x y id val";
+            //format--> "list x y id val";
             ////////////////
             snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
                 cursor.x, 
                 cursor.y, 
                 0,
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][0]);
+            
+            //printf("DEBUG--> sending pnuk data: '%s'\n", _send_pnuk);
+
             FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
         
@@ -80,6 +83,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
                 cursor.y, 
                 1,
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][1]);
+
             FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
         
@@ -166,7 +170,7 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
         1);
     
         //finish
-    if(!CMPbuffer(ctx->fb->o_buffer, ctx->fb->buffer, NOKIA_FRAMEBUFFER_SIZE)) //fix
+    //if(!CMPbuffer(ctx->fb->o_buffer, ctx->fb->buffer, NOKIA_FRAMEBUFFER_SIZE)) //fix
     {
         //nokia_framebuffer_flush(ctx->fb);
     }

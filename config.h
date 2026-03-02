@@ -31,4 +31,4 @@
 #define MUX_B_ADDR_2 26
 #define MUX_B_ADDR_3 1
 
-#define SPI_SPEED 400000
+#define SPI_SPEED 4000000
