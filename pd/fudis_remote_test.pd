@@ -1,5 +1,5 @@
-#N canvas 181 228 450 300 12;
-#X obj 47 95 fudiparse;
+#N canvas 403 260 450 300 12;
+#X obj 64 115 fudiparse;
 #X obj 129 77 netreceive -u -b;
 #X obj 30 209 print;
 #X obj 224 148 route /matrix;
@@ -8,6 +8,7 @@
 #X msg 129 51 listen 7777;
 #X obj 63 155 route /pnuky;
 #X connect 0 0 7 0;
+#X connect 0 0 3 0;
 #X connect 1 0 0 0;
 #X connect 3 0 4 0;
 #X connect 5 0 6 0;

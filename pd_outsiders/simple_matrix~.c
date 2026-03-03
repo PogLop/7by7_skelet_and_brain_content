@@ -42,6 +42,8 @@ void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
   x->val = s->s_name[0] - '0';
   x->posx = s->s_name[1] - '0';
   x->posy = s->s_name[2] - '0';
+
+  
   
   x->m_state[x->posy][x->posx] = x->val;
 
