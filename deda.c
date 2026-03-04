@@ -33,10 +33,10 @@ int deda_nokia_init()
 
     for(int g = 0; g < (int)(sizeof(commands) / sizeof(commands[0])); g++)
     {
-        gpioWrite(PIN_NOKIA_CE, 0);
+        //gpioWrite(PIN_NOKIA_CE, 0);
         gpioWrite(PIN_NOKIA_DC, 0);
         spiWrite(spi, (char*)&commands[g], 1);
-        gpioWrite(PIN_NOKIA_CE, 1);
+        //gpioWrite(PIN_NOKIA_CE, 1);
     }
 
     return 0;
@@ -48,10 +48,10 @@ void set_display_x(uint8_t value)
 
     uint8_t cmd = 0x80 | value;
 
-    gpioWrite(PIN_NOKIA_CE, 0);
+    //gpioWrite(PIN_NOKIA_CE, 0);
     gpioWrite(PIN_NOKIA_DC, 0);
     spiWrite(spi, (char*)&cmd, 1);
-    gpioWrite(PIN_NOKIA_CE, 1);
+    //gpioWrite(PIN_NOKIA_CE, 1);
 }
 
 void set_display_y(uint8_t value)
@@ -60,10 +60,10 @@ void set_display_y(uint8_t value)
     
     uint8_t cmd = 0x40 | value;
     
-    gpioWrite(PIN_NOKIA_CE, 0);
+    //gpioWrite(PIN_NOKIA_CE, 0);
     gpioWrite(PIN_NOKIA_DC, 0);
     spiWrite(spi, (char*)&cmd, 1);
-    gpioWrite(PIN_NOKIA_CE, 1);
+    //gpioWrite(PIN_NOKIA_CE, 1);
 }
 
 /*
@@ -74,12 +74,12 @@ void test_write()
     set_display_x(0);
     set_display_y(0);
 
-    gpioWrite(PIN_NOKIA_CE, 0);
+    //gpioWrite(PIN_NOKIA_CE, 0);
     gpioWrite(PIN_NOKIA_DC, 1);
 
     spiWrite(spi, (char*)&data, 1);
 
-    gpioWrite(PIN_NOKIA_CE, 1);
+    //gpioWrite(PIN_NOKIA_CE, 1);
     
     gpioDelay(2000);
     
@@ -90,10 +90,10 @@ void test_write()
     for(uint8_t d = 0; d < NOKIA_BANKS_Y; d++)
     {
         set_display_y(d);
-        gpioWrite(PIN_NOKIA_CE, 0);
+        //gpioWrite(PIN_NOKIA_CE, 0);
         gpioWrite(PIN_NOKIA_DC, 1);
         spiWrite(spi, (char*)&test, sizeof(test));
-        gpioWrite(PIN_NOKIA_CE, 1);
+        //gpioWrite(PIN_NOKIA_CE, 1);
     }
     
     return;
@@ -110,10 +110,10 @@ void mentalni_ocista()
     for(uint8_t d = 0; d < NOKIA_BANKS_Y; d++)
     {
         set_display_y(d);
-        gpioWrite(PIN_NOKIA_CE, 0);
+        //gpioWrite(PIN_NOKIA_CE, 0);
         gpioWrite(PIN_NOKIA_DC, 1);
         spiWrite(spi, (char*)&line_buffer, sizeof(line_buffer));
-        gpioWrite(PIN_NOKIA_CE, 1);
+        //gpioWrite(PIN_NOKIA_CE, 1);
     }
 
     return;
@@ -127,12 +127,12 @@ void deda_nokia_buffer_flush(frame_buffer_t *frame_buffer)
         {
             set_display_y(d);
 
-            gpioWrite(PIN_NOKIA_CE, 0);
+            //gpioWrite(PIN_NOKIA_CE, 0);
             gpioWrite(PIN_NOKIA_DC, 1);
 
             spiWrite(spi, (char*)&frame_buffer->buffer[t], 1);
             
-            gpioWrite(PIN_NOKIA_CE, 1);
+            //gpioWrite(PIN_NOKIA_CE, 1);
         }
     }
     

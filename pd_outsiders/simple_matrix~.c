@@ -39,18 +39,15 @@ typedef struct _simple_matrix_tilde
 
 void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
 {
-  x->val = s->s_name[0] - '0';
-  x->posx = s->s_name[1] - '0';
-  x->posy = s->s_name[2] - '0';
+  int g, h, inx, res;
 
-  
-  
-  x->m_state[x->posy][x->posx] = x->val;
-
-  for(int g = 0; g < MATRIX_SIZE; g++)
+  for(g = 0; g < MATRIX_SIZE; g++)
   {
-    for(int h = 0; h < MATRIX_SIZE; h++)
+    for(h = 0; h < MATRIX_SIZE; h++)
     {
+      res = s->s_name[(g * MATRIX_SIZE * 2) + h * 2] - '0'; //:)
+
+      x->m_state[g][h] = res;
       printf("%d", x->m_state[g][h]);
     }
     printf("\n");

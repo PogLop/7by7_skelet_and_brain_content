@@ -98,7 +98,7 @@ void setup()
 	//NOKAI
 	gpioSetMode(PIN_NOKIA_DC, P_OUT); //data/command
 	gpioSetMode(PIN_NOKIA_RST, P_OUT); //rst
-	gpioSetMode(PIN_NOKIA_CE, P_OUT); //ce
+	//gpioSetMode(PIN_NOKIA_CE, P_OUT); //ce //using proper spi CE0 now
 	//SETUP END :(
 
 	printf("77ready asi? :o)77\n");

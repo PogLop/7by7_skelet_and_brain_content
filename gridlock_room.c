@@ -134,12 +134,23 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     
         FOODISmail(ctx->food, _send_m, "/matrix");
         
-        memcpy(&_mx_b_buff, ctx->matrix_state, sizeof(_mx_b_buff));
-
+        memcpy(_mx_b_buff, *ctx->matrix_state, sizeof(_mx_b_buff));
         
         free(_tmp);
+        printf("sedning data\n");
     }
 
+
+    for(int k = 0; k < MATRIX_SIZE; k++)
+    {
+        for(int f = 0; f < MATRIX_SIZE; f++)
+        {
+            printf("%d", _mx_b_buff[k][f]);
+        }
+        printf("\n");
+    }
+    printf("\n\n");
+    
 
     //draw xxxxxxxxx xoxo mwuah
     for(int a = 0; a < MATRIX_SIZE; a++)

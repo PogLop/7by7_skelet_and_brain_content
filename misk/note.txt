@@ -31,3 +31,6 @@ sudo apt-get install puredata
 
 dtparam=audio=on
 dtoverlay=audremap,pins_12_13 
+
+
+c trigraphs

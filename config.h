@@ -18,10 +18,10 @@
 
 #define PIN_NOKIA_DC 4
 #define PIN_NOKIA_RST 27
-#define PIN_NOKIA_CE 17
+//#define PIN_NOKIA_CE 17
 //rest of the pins is handled by pigpio spi
 
-#define MUX_A_COM 2
+#define MUX_A_COM 17 //do not use gpio 2 :)
 #define MUX_A_ADDR_1 23
 #define MUX_A_ADDR_2 24
 #define MUX_A_ADDR_3 25
