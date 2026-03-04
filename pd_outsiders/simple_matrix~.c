@@ -3,7 +3,7 @@
 
 #include <m_pd.h>
 #include <string.h>
-#include <stdarg.h>
+//#include <stdarg.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -37,22 +37,20 @@ typedef struct _simple_matrix_tilde
 } t_simple_matrix_tilde;
 
 
-void simple_matrix_tilde_oscin(t_simple_matrix_tilde *x, t_symbol *s)
+void simple_matrix_tilde_fudin(t_simple_matrix_tilde *x, t_symbol *s, int argc, t_atom *argv)
 {
-  int g, h, inx, res;
+  int g, *_m_s = (int *)x->m_state; //decay into 1d array :o) decay!!!
 
-  for(g = 0; g < MATRIX_SIZE; g++)
-  {
-    for(h = 0; h < MATRIX_SIZE; h++)
-    {
-      res = s->s_name[(g * MATRIX_SIZE * 2) + h * 2] - '0'; //:)
-
-      x->m_state[g][h] = res;
-      printf("%d", x->m_state[g][h]);
-    }
-    printf("\n");
+  if(argc > (MATRIX_SIZE * MATRIX_SIZE)) 
+  { 
+    pd_error(x->x_obj.ob_pd, "matrix data too large %d (expected  %d or <)", argc, (MATRIX_SIZE*MATRIX_SIZE));
+    return; 
   }
-  printf("\n\n");
+
+  for(g = 0; g < argc; g++)
+  {
+    _m_s[g] = atom_getint(argv + g);
+  }
 }
 
 
@@ -133,7 +131,7 @@ void *simple_matrix_tilde_new(/*t_symbol *s, int argc, t_atom *argv*/)
     x->outs[j] = outlet_new(&x->x_obj, &s_signal);
   }
   
-  x->sym_in_on = inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("symbol"), gensym("oscin"));
+  x->sym_in_on = inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("list"), gensym("fudin"));
 
   return (void *) x;
 }
@@ -160,7 +158,7 @@ void simple_matrix_tilde_setup(void)
   );
 
   
-  class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_oscin, gensym("oscin"), A_DEFSYMBOL, 0);
+  class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_fudin, gensym("fudin"), A_GIMME, 0);
   
   class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_dsp, gensym("dsp"), A_CANT, 0);
   
