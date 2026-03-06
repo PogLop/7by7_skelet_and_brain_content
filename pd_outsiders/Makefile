@@ -6,7 +6,8 @@ lib.name = gridlocke
 #lib.setup.sources = simple_matrix~.c
 #make-lib-executable=yes
 
-simple_matrix~.class.sources = simple_matrix~.c
+#simple_matrix~.class.sources = simple_matrix~.c
+simple_matrix~.class.sources = simple_matrix~.c 
 changes.class.sources = changes.c
 pnukget.class.sources = pnukget.c
 
