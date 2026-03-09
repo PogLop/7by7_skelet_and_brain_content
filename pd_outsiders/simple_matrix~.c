@@ -70,7 +70,9 @@ static t_int *simple_matrix_tilde_perform(t_int *w)
     {
       for(o = 0; o < x->x_n; o++) //mix samples together, one by one
       {
-        mul = x->m_state[i][j] ? 1 : 0;
+        //trosku zbytecny, ale co kdyby nekdo do matrixu infiltroval velky cislo? hmmm? 
+        //ma to hloubku clovece!
+        mul = x->m_state[i][j] ? 1 : 0; 
         x->outs_v[j][o] += ins[i * x->x_n + o] * mul * ZVUKAR;
       }
     }
@@ -158,9 +160,7 @@ void simple_matrix_tilde_setup(void)
   );
 
   
-  class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_fudin, gensym("fudin"), A_GIMME, 0);
-  
+  class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_fudin, gensym("fudin"), A_GIMME, 0); 
   class_addmethod(simple_matrix_tilde_class, (t_method)simple_matrix_tilde_dsp, gensym("dsp"), A_CANT, 0);
-  
   CLASS_MAINSIGNALIN(simple_matrix_tilde_class, t_simple_matrix_tilde, some);
 }

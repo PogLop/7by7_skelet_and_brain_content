@@ -79,19 +79,14 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
             if(ctx->pnuky[h].pnuk_delta != 0)
             {
                 ctx->matrix_pnuk_state[0][cursor.x][cursor.y][h] += ctx->pnuky[h].pnuk_delta;
-
-                //format--> "list x y id val";
-                ////////////////
-                snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
-                    cursor.x, 
-                    cursor.y, 
-                    h,
-                    ctx->matrix_pnuk_state[0][cursor.x][cursor.y][h]);
-
-                //printf("DEBUG--> sending pnuk data: '%s'\n", _send_pnuk);
-
-                FOODISmail(ctx->food, _send_pnuk, "/pnuky");
             }
+            //format--> "list x y id val";
+            snprintf(_send_pnuk, sizeof(_send_pnuk), "list\x20%d\x20%d\x20%d\x20%d;", 
+                cursor.x, 
+                cursor.y, 
+                h,
+                ctx->matrix_pnuk_state[0][cursor.x][cursor.y][h]);
+            FOODISmail(ctx->food, _send_pnuk, "/pnuky");
         }
 
         
@@ -121,41 +116,15 @@ goto_room_t gridlock_update(room_ctx_t *ctx)
     }
     last_btn2_sate = ctx->pnuky[2].btn_stat;
 
-
-
     //send matrix data to pure data
     //only if it changed
     //else it could lag pure data DSP or whateaver
-    //if(!CMPbuffer((uint8_t *)ctx->matrix_state, (uint8_t *)_mx_b_buff, (MATRIX_SIZE * MATRIX_SIZE)))
-    if(memcmp(ctx->matrix_state, _mx_b_buff, (MATRIX_SIZE * MATRIX_SIZE * sizeof(int16_t))))
-    {
-        _tmp = FORMATRIX((int16_t *)ctx->matrix_state, 7, 7);
 
-        //snprintf(_send_m, sizeof(_send_m), "list\x20%s;", _tmp);
-        snprintf(_send_m, sizeof(_send_m), "%s;", _tmp);
-    
-        FOODISmail(ctx->food, _send_m, "/matrix");
-        
-        memcpy(_mx_b_buff, ctx->matrix_state, (MATRIX_SIZE * MATRIX_SIZE * sizeof(int16_t)));
-        
-        free(_tmp);
-
-        //printf("sedning data\n");
-    } else { printf("staying same "); }
-
-    //[DEBUG]
-    /*     
-    for(int k = 0; k < MATRIX_SIZE; k++)
-    {
-        for(int f = 0; f < MATRIX_SIZE; f++)
-        {
-            printf("%d", _mx_b_buff[k][f]);
-        }
-        printf("\n");
-    }
-    printf("\n\n");
-    */
-
+    _tmp = FORMATRIX((int16_t *)ctx->matrix_state, 7, 7);
+    snprintf(_send_m, sizeof(_send_m), "list\x20%s;", _tmp);
+    FOODISmail(ctx->food, _send_m, "/matrix");
+    memcpy(_mx_b_buff, ctx->matrix_state, (MATRIX_SIZE * MATRIX_SIZE * sizeof(int16_t)));
+    free(_tmp);
 
     //draw xxxxxxxxx xoxo mwuah
     for(int a = 0; a < MATRIX_SIZE; a++)

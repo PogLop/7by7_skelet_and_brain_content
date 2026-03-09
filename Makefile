@@ -3,12 +3,15 @@
 ARCHITEKTURA = pd_linux
 OP_SY = $(shell uname -s 2>/dev/null)
 
+
 ifeq ($(OP_SY),Linux)
 	ARCHITEKTURA = pd_linux
+endif
+
 ifeq ($(OP_SY),Darwin)
 	ARCHITEKTURA = pd_darwin
+endif
 
-#ARCHITEKTURA = pd_linux # for purposes of further development (pd_darwin i mean)
 
 PD_LIB = pd_outsiders/*.$(ARCHITEKTURA)
 PD_LIB_SOURCE = $(wildcard pd_outsiders/*.c)
@@ -30,10 +33,10 @@ main.o:
 	gcc -Wall -o main.o main.c -lpigpio -lrt -pthread
 	sudo chmod +x *.sh
 	sudo ./main.o &
+	sudo puredata -nogui -audiooutdev 0 -noadc -rt $(PATCH)
 
 $(PD_LIB): $(PD_LIB_SOURCE)
 	cd pd_outsiders && $(MAKE) && $(MAKE) install && $(MAKE) clean 
-# 								CLASS_FILES="$(notdir $(PD_LIB_SOURCE))"
 
 clean:
 	rm -f main.o
@@ -52,3 +55,7 @@ synco-him:
 stop:
 	@echo "stopping 77 syntheiszesrs byeee :o/"
 	sudo kill $(shell jobs -p)
+
+run:
+	sudo ./main.o &
+	sudo puredata -nogui -audiooutdev 0 -noadc -rt $(PATCH)

@@ -1,5 +1,5 @@
-sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/osc_test.pd
-sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/fudis_remote_test.pd
+sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/
+
 sudo screen -S stuff -md bash -c "./main"
 
 
