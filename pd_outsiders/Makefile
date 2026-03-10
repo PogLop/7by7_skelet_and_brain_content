@@ -1,15 +1,15 @@
-# Makefile for mylib
+# Makefile for gridlocke
 
 lib.name = gridlocke
 
-#single file lib, very confusig at 
+#single file lib, very confusig
 #lib.setup.sources = simple_matrix~.c
 #make-lib-executable=yes
 
-#simple_matrix~.class.sources = simple_matrix~.c
 simple_matrix~.class.sources = simple_matrix~.c 
 changes.class.sources = changes.c
 pnukget.class.sources = pnukget.c
+mrg.class.sources = mrg.c
 
 # datafiles = myclass1-help.pd myclass2-help.pd README.txt LICENSE.txt
 

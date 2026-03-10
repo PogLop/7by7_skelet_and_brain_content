@@ -1,4 +1,5 @@
 sudo puredata -nogui -audiooutdev 0 -noadc -rt pd/
+sudo puredata -nogui -stderr -audiooutdev 0 -noadc -rt pd/remote_patch_1.pd
 
 sudo screen -S stuff -md bash -c "./main"
 

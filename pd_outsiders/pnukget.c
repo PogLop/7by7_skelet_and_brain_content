@@ -38,11 +38,7 @@ void *pnukget_new(t_symbol *s, int argc, t_atom *argv)
 void pnukget_free(t_pnukget *x)
 {
     int k;
-
-    for(k = 0; k < PNUKU_TOLIK_JEST; k++)
-        outlet_free(x->v_out[k]);
-    
-    return;
+    for(k = 0; k < PNUKU_TOLIK_JEST; k++){ outlet_free(x->v_out[k]); }
 }
 
 void pnukget_setup(void)
