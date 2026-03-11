@@ -53,7 +53,7 @@ synco-him:
 	rsync -av --delete . poklop@$(ADDR):/home/poklop/77 --exclude-from=".rsyncignore"
 
 stop:
-	@echo "stopping 77 syntheiszesrs byeee :o/"
+	@echo "stopping 77 syntheiszesrs byeee!"
 	sudo kill $(shell jobs -p)
 
 run:
