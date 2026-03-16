@@ -20,6 +20,7 @@ void gridlocke_setup(void)
     pnukget_setup();
     simple_matrix_tilde_setup();
     
-    post("interaction library for 77 synthesizer");
-    post("  by Porkop Shcovamec 2026");
+    post(".     interaction library for 77 synthesizer  .");
+    post(".        by Porkop Shcovamec 2026             .");
+    post(".        report bugs to /dev/null             .");
 }
